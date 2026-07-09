@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offer IQ — Job Offer Training Simulator | The Grove</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:      #0B2B26;
+  --green-mid:  #1A4D45;
+  --green-deep: #071F1B;
+  --green-card: #0d3028;
+  --tan:        #FAF3DD;
+  --tan-mid:    #F0E6C0;
+  --tan-pale:   #FDF9EE;
+  --gold:       #D4A843;
+  --gold-light: #E8C56A;
+  --gold-pale:  #F5EAC8;
+  --white:      #FFFFFF;
+  --text-light: #C8D5C2;
+  --text-muted: #7A9A8E;
+  --success:    #22C55E;
+  --warn:       #F59E0B;
+  --danger:     #EF4444;
+  --card-bdr:   rgba(212,168,67,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff;min-height:100vh;overflow-x:hidden;}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:2000;
+  height:58px;background:var(--green);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;
+  box-shadow:0 2px 16px rgba(0,0,0,.4);
+}
+#nav .nav-brand{display:flex;align-items:center;gap:14px;}
+#nav .nav-logo{height:32px;object-fit:contain;}
+#nav .nav-pipe{width:1px;height:28px;background:rgba(255,255,255,.2);}
+#nav .nav-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;}
+#nav .nav-back{font-size:12px;font-weight:700;color:rgba(255,255,255,.65);text-decoration:none;transition:color .18s;}
+#nav .nav-back:hover{color:var(--gold);}
+#nav .nav-pills{display:flex;gap:8px;}
+.nav-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:700;color:#fff;}
+.nav-pill b{color:var(--gold-light);}
+
+/* ── PROGRESS BAR ── */
+#pbar-wrap{position:fixed;top:58px;left:0;right:0;z-index:1999;height:4px;background:rgba(255,255,255,.06);}
+#pbar{height:100%;background:linear-gradient(90deg,var(--gold),var(--green-mid));width:0%;transition:width .5s ease;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ══ INTRO ══ */
+#s0{background:var(--green-deep);}
+.intro-hero{
+  background:var(--green);
+  padding:90px 24px 60px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.intro-hero::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(11,43,38,0) 60%,var(--green-deep) 100%);
+  pointer-events:none;
+}
+.intro-logo-row{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:32px;}
+.intro-logo-row img{height:52px;object-fit:contain;}
+.intro-divider{width:1px;height:52px;background:rgba(255,255,255,.25);}
+.intro-logo-text .dept{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.55);font-weight:600;}
+.intro-logo-text .unit{font-size:16px;font-weight:800;color:#fff;}
+.intro-eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--gold-light);margin-bottom:14px;}
+.intro-title{font-size:clamp(52px,10vw,100px);font-weight:900;line-height:.95;color:var(--tan);margin-bottom:6px;font-family:'EB Garamond',serif;font-style:italic;}
+.intro-sub{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold-light);margin-bottom:22px;}
+.intro-role{
+  display:inline-block;background:var(--gold);color:var(--green);
+  font-size:13px;font-weight:800;padding:9px 24px;border-radius:4px;
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:30px;
+}
+.intro-desc{font-size:16px;color:var(--text-light);max-width:580px;margin:0 auto 36px;line-height:1.8;font-weight:400;}
+
+.stat-strip{
+  background:var(--green-mid);
+  padding:28px 24px;
+  display:flex;justify-content:center;flex-wrap:wrap;gap:0;
+}
+.stat-item{padding:0 32px;text-align:center;border-right:1px solid rgba(255,255,255,.15);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:28px;font-weight:900;color:var(--gold);line-height:1;}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;font-weight:600;}
+
+.intro-body{background:var(--green-deep);padding:48px 24px 60px;max-width:780px;margin:0 auto;width:100%;}
+.intro-body h3{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:16px;font-weight:700;}
+.major-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;}
+.mjr-btn{
+  background:transparent;border:2px solid rgba(255,255,255,.15);
+  border-radius:4px;padding:10px 18px;cursor:pointer;
+  font-size:13px;font-weight:600;color:var(--text-light);
+  font-family:'Montserrat',sans-serif;transition:all .18s;
+}
+.mjr-btn:hover{border-color:var(--gold);color:#fff;}
+.mjr-btn.sel{border-color:var(--gold);background:rgba(212,168,67,.15);color:#fff;box-shadow:0 0 0 3px rgba(212,168,67,.12);}
+
+.btn-start{
+  display:block;width:100%;max-width:380px;margin:0 auto;
+  background:var(--gold);color:var(--green);border:none;
+  padding:18px 0;border-radius:4px;
+  font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif;
+  box-shadow:0 6px 24px rgba(212,168,67,.3);
+}
+.btn-start:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 10px 30px rgba(212,168,67,.4);}
+.start-note{text-align:center;font-size:12px;color:var(--text-muted);margin-top:12px;}
+
+/* ── SHARED SCENE ── */
+.wrap{max-width:900px;margin:0 auto;width:100%;padding:80px 22px 50px;}
+.scene-tag{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--gold-light);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.scene-tag::before{content:'';display:block;width:28px;height:3px;background:var(--gold);border-radius:2px;}
+.scene-h1{font-size:clamp(22px,4vw,34px);font-weight:900;line-height:1.2;margin-bottom:10px;}
+.scene-sub{font-size:15px;color:var(--text-muted);line-height:1.75;margin-bottom:26px;font-weight:400;}
+
+/* ── DIALOGUE ── */
+.dlg{
+  background:var(--green-card);border:1px solid var(--card-bdr);
+  border-radius:12px;padding:22px;margin-bottom:20px;
+  display:flex;gap:18px;align-items:flex-start;
+}
+.av{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;border:3px solid var(--gold);}
+.av.alt{border-color:var(--green-mid);}
+.dlg-body .dn{font-size:14px;font-weight:800;margin-bottom:2px;}
+.dlg-body .dr{font-size:11px;color:var(--gold-light);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px;}
+.dlg-body .ds{font-size:14px;line-height:1.75;color:var(--text-light);font-weight:400;}
+
+/* ── INFO BOXES ── */
+.ibox{background:rgba(212,168,67,.1);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;font-size:14px;line-height:1.7;color:var(--text-light);margin-bottom:16px;}
+.wbox{background:rgba(239,68,68,.1);border-left:4px solid var(--danger);border-radius:0 8px 8px 0;padding:14px 18px;font-size:14px;line-height:1.7;color:var(--text-light);margin-bottom:16px;}
+.gbox{background:rgba(34,197,94,.1);border-left:4px solid var(--success);border-radius:0 8px 8px 0;padding:14px 18px;font-size:14px;line-height:1.7;color:var(--text-light);margin-bottom:16px;}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;}
+.btn-p,.btn-s{
+  padding:14px 28px;font-size:14px;font-weight:800;border-radius:4px;
+  cursor:pointer;border:none;font-family:'Montserrat',sans-serif;
+  text-transform:uppercase;letter-spacing:.06em;transition:all .2s;
+}
+.btn-p{background:var(--gold);color:var(--green);box-shadow:0 4px 18px rgba(212,168,67,.25);}
+.btn-p:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 6px 22px rgba(212,168,67,.35);}
+.btn-p:disabled{background:#3a4a3a;color:#666;cursor:not-allowed;box-shadow:none;}
+.btn-s{background:transparent;border:2px solid rgba(255,255,255,.2);color:var(--text-light);}
+.btn-s:hover{border-color:var(--gold);color:#fff;background:rgba(212,168,67,.08);}
+
+/* ── OFFER LETTER ── */
+.offer-letter{
+  background:var(--green-card);border:1px solid var(--card-bdr);
+  border-radius:12px;padding:32px;margin-bottom:24px;font-size:15px;
+  line-height:1.9;color:var(--text-light);
+}
+.ol-hd{text-align:center;margin-bottom:28px;}
+.ol-co{font-size:19px;font-weight:900;margin-bottom:4px;}
+.ol-sub{font-size:12px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
+.ol-p{margin-bottom:20px;}
+.term{color:var(--gold-light);font-weight:700;cursor:pointer;position:relative;border-bottom:2px dotted var(--gold-light);}
+.term:hover{color:var(--gold);}
+.term.flag{color:var(--danger);border-bottom-color:var(--danger);}
+.term.good{color:var(--success);border-bottom-color:var(--success);}
+
+/* ── TOOLTIP ── */
+#tip-box{
+  display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:3000;background:var(--green-card);border:2px solid var(--gold);
+  border-radius:12px;width:90%;max-width:540px;padding:28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+#tip-box.show{display:block;}
+#tp-x{position:absolute;top:12px;right:12px;background:transparent;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;font-weight:700;}
+#tp-x:hover{color:var(--danger);}
+.tp-tag{display:inline-block;background:rgba(212,168,67,.2);border:1px solid var(--gold);color:var(--gold-light);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:4px 10px;border-radius:14px;margin-bottom:12px;}
+.tp-hed{font-size:20px;font-weight:900;margin-bottom:12px;}
+.tp-bod{font-size:14px;line-height:1.8;color:var(--text-light);margin-bottom:18px;}
+.tp-stat{background:rgba(212,168,67,.08);border-left:3px solid var(--gold);padding:12px 16px;border-radius:0 6px 6px 0;margin-top:16px;}
+.tp-stat .tp-sv{font-size:18px;font-weight:900;color:var(--gold-light);}
+.tp-stat .tp-sl{font-size:12px;color:var(--text-muted);margin-top:4px;}
+
+/* ── BENCHMARKS ── */
+.bench-card{background:var(--green-card);border:1px solid var(--card-bdr);border-radius:12px;padding:26px;margin-bottom:20px;}
+.bc-h{font-size:17px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.bc-row{display:grid;grid-template-columns:1.3fr 2fr .8fr;gap:14px;align-items:center;margin-bottom:12px;}
+.bc-lbl{font-size:13px;color:var(--text-muted);font-weight:700;}
+.bc-bar{height:20px;background:rgba(255,255,255,.05);border-radius:10px;overflow:hidden;position:relative;}
+.bc-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:10px;width:0%;transition:width 1.2s ease;}
+.bc-fill.red{background:linear-gradient(90deg,var(--danger),#e63940);}
+.bc-val{font-size:15px;font-weight:900;color:#fff;}
+
+/* ── VERDICT ── */
+.verdict{
+  background:var(--green-card);border:2px solid var(--card-bdr);
+  border-radius:12px;padding:24px;margin-bottom:20px;
+  display:flex;gap:18px;align-items:flex-start;
+}
+.v-ico{font-size:42px;flex-shrink:0;}
+.v-ttl{font-size:18px;font-weight:900;margin-bottom:8px;}
+.v-bod{font-size:14px;line-height:1.8;color:var(--text-light);}
+.verdict.v-warn{border-color:var(--warn);background:rgba(245,158,11,.08);}
+.verdict.v-bad{border-color:var(--danger);background:rgba(239,68,68,.08);}
+.verdict.v-good{border-color:var(--success);background:rgba(34,197,94,.08);}
+
+/* ── BENEFITS ── */
+.ben-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+.ben-card{
+  background:var(--green-card);border:2px solid var(--card-bdr);
+  border-radius:10px;padding:20px;text-align:center;cursor:pointer;
+  transition:all .2s;
+}
+.ben-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(212,168,67,.15);}
+.ben-card.exp{border-color:var(--success);}
+.bic{font-size:38px;margin-bottom:8px;}
+.bit{font-size:14px;font-weight:800;margin-bottom:4px;}
+.bid{font-size:11px;color:var(--text-muted);}
+
+.ben-overlay{position:fixed;inset:0;z-index:3000;background:rgba(0,10,8,.85);display:flex;align-items:center;justify-content:center;padding:20px;}
+.ben-modal{background:var(--green-card);border:2px solid var(--gold);border-radius:16px;width:100%;max-width:600px;padding:36px;position:relative;max-height:90vh;overflow-y:auto;}
+.bm-x{position:absolute;top:14px;right:14px;background:transparent;border:none;color:var(--text-muted);font-size:26px;cursor:pointer;font-weight:700;}
+.bm-x:hover{color:var(--danger);}
+.bm-icon{font-size:58px;text-align:center;margin-bottom:14px;}
+.bm-title{font-size:24px;font-weight:900;text-align:center;margin-bottom:8px;}
+.bm-cat{font-size:11px;text-align:center;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:22px;}
+.bm-desc{font-size:15px;line-height:1.9;color:var(--text-light);margin-bottom:24px;}
+.bm-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.bm-pro,.bm-con{background:rgba(255,255,255,.03);padding:16px;border-radius:8px;font-size:13px;line-height:1.8;}
+.bm-pro strong{display:block;margin-bottom:6px;color:var(--success);}
+.bm-con strong{display:block;margin-bottom:6px;color:var(--warn);}
+.bm-tip-box{background:rgba(212,168,67,.1);border-left:4px solid var(--gold);padding:14px 18px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.8;}
+
+/* ── RED FLAGS QUIZ ── */
+.quiz-grid{display:grid;gap:12px;margin-bottom:24px;}
+.qcard{
+  background:var(--green-card);border:2px solid var(--card-bdr);
+  border-radius:10px;padding:18px 20px;cursor:pointer;
+  display:flex;align-items:flex-start;gap:14px;transition:all .2s;
+}
+.qcard:hover{border-color:var(--gold);box-shadow:0 4px 18px rgba(212,168,67,.1);}
+.qcard.picked{border-color:var(--danger);background:rgba(239,68,68,.08);}
+.qb{width:24px;height:24px;border:2px solid rgba(255,255,255,.25);border-radius:4px;flex-shrink:0;position:relative;transition:all .2s;}
+.qcard.picked .qb{border-color:var(--danger);background:var(--danger);}
+.qcard.picked .qb::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;}
+.qt{font-size:14px;font-weight:600;line-height:1.7;}
+
+/* ── ASSESSMENT ── */
+.acat{background:var(--green-card);border:1px solid var(--card-bdr);border-radius:10px;padding:20px;margin-bottom:16px;}
+.acat-h{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.asc-row{display:flex;gap:4px;margin-bottom:8px;}
+.asc-box{width:14px;height:14px;background:rgba(255,255,255,.1);border-radius:2px;}
+.asc-box.on{background:var(--gold);}
+.acat-sum{font-size:13px;color:var(--text-muted);line-height:1.7;}
+
+/* ── NEGOTIATION ── */
+.nround{background:var(--green-card);border:1px solid var(--card-bdr);border-radius:12px;padding:24px;margin-bottom:20px;}
+.nr-h{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:12px;}
+.nr-q{font-size:15px;font-weight:700;line-height:1.8;margin-bottom:16px;color:#fff;}
+.nopt{display:block;width:100%;text-align:left;background:rgba(255,255,255,.03);border:2px solid rgba(255,255,255,.12);border-radius:8px;padding:14px 18px;margin-bottom:10px;font-size:14px;font-family:'Montserrat',sans-serif;color:var(--text-light);cursor:pointer;transition:all .2s;font-weight:600;line-height:1.7;}
+.nopt:hover{border-color:var(--gold);background:rgba(212,168,67,.08);}
+.nopt.sel{border-color:var(--success);background:rgba(34,197,94,.08);color:#fff;}
+
+/* ── RESULTS ── */
+.res-hero{background:var(--green-card);border-radius:16px;padding:42px 28px;text-align:center;margin-bottom:32px;border:2px solid var(--card-bdr);}
+.res-ring-wrap{display:flex;align-items:center;justify-content:center;margin-bottom:22px;}
+#ring{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--gold) 0deg,var(--green-card) 0deg);transition:background .6s;}
+#ring-n{font-size:52px;font-weight:900;color:#fff;}
+.res-tier{font-size:20px;font-weight:900;margin-bottom:14px;}
+.res-sum{font-size:14px;color:var(--text-muted);line-height:1.8;}
+
+.cl-wrap h3{font-size:15px;font-weight:800;margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);}
+.cl-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;cursor:pointer;}
+.cl-box{width:22px;height:22px;border:2px solid rgba(255,255,255,.25);border-radius:4px;flex-shrink:0;position:relative;transition:all .2s;}
+.cl-box.on{border-color:var(--success);background:var(--success);}
+.cl-box.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13px;}
+.cl-txt{font-size:14px;line-height:1.7;color:var(--text-light);font-weight:500;}
+.cl-txt.done{color:var(--text-muted);text-decoration:line-through;}
+
+/* ── CERTIFICATE ── */
+.cert{
+  background:var(--tan);color:var(--green);
+  border-radius:12px;padding:48px 40px;margin-top:32px;text-align:center;
+  position:relative;border:6px solid var(--green);
+  box-shadow:0 0 0 2px var(--gold);
+}
+.cert-header{
+  background:var(--green);margin:-48px -40px 32px;
+  padding:28px 40px;border-radius:6px 6px 0 0;
+  display:flex;align-items:center;justify-content:center;gap:20px;
+}
+.cert-logo{height:42px;object-fit:contain;}
+.cert-header-text .grove{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:rgba(250,243,221,.6);font-weight:700;margin-bottom:2px;}
+.cert-header-text .brand{font-size:16px;font-weight:800;color:var(--gold);}
+.cert-pipe{width:1px;height:42px;background:rgba(255,255,255,.2);}
+.cert-ttl{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:6px;font-weight:700;}
+.cert-h1{font-size:38px;font-weight:900;margin-bottom:18px;color:var(--green);font-family:'EB Garamond',serif;}
+.cert-h1 span{color:var(--gold);}
+.cert-bod{font-size:14px;color:#5a6a5a;line-height:1.8;margin-bottom:26px;}
+.cert-stu{font-size:24px;font-weight:700;color:var(--green);font-family:'EB Garamond',serif;font-style:italic;margin-bottom:8px;}
+.cert-scenario{font-size:13px;color:#5a6a5a;margin-bottom:28px;}
+.cert-gold-bar{height:3px;background:var(--gold);margin:0 auto 24px;width:80px;border-radius:2px;}
+.cert-foot{display:flex;justify-content:space-around;padding-top:22px;border-top:2px solid var(--tan-mid);font-size:11px;color:#7a8a7a;}
+.cf-col .cf-sig{font-size:18px;font-weight:700;font-family:'EB Garamond',serif;color:var(--green);margin-bottom:4px;}
+.cert-linkedin{
+  display:inline-block;margin-top:20px;
+  background:var(--green);color:var(--tan);
+  padding:10px 24px;border-radius:6px;
+  font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:'Montserrat',sans-serif;
+}
+.cert-linkedin:hover{background:var(--green-mid);}
+
+/* ── FOOTER ── */
+.sim-foot{background:var(--green);padding:18px 24px;text-align:center;font-size:12px;color:rgba(255,255,255,.45);margin-top:auto;border-top:2px solid var(--gold);}
+.sim-foot a{color:var(--gold);text-decoration:none;}
+
+/* ── CHAT BOX ── */
+#chat-toggle{position:fixed;bottom:24px;right:24px;z-index:2500;width:60px;height:60px;border-radius:50%;background:var(--gold);border:none;color:var(--green);font-size:26px;cursor:pointer;box-shadow:0 6px 24px rgba(212,168,67,.4);transition:all .2s;display:flex;align-items:center;justify-content:center;font-weight:800;}
+#chat-toggle:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(212,168,67,.55);}
+#chat-toggle.open{background:var(--green-mid);}
+#chat-box{position:fixed;bottom:100px;right:24px;z-index:2500;width:380px;max-width:calc(100vw - 48px);height:520px;max-height:calc(100vh - 140px);background:var(--green-card);border:2px solid var(--gold);border-radius:16px;box-shadow:0 12px 48px rgba(0,0,0,.55);display:none;flex-direction:column;}
+#chat-box.show{display:flex;}
+#chat-header{background:var(--green);padding:16px 20px;border-radius:14px 14px 0 0;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;}
+#chat-header h3{font-size:15px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px;}
+#chat-close{background:transparent;border:none;color:var(--text-muted);font-size:24px;cursor:pointer;font-weight:700;line-height:1;padding:0;}
+#chat-close:hover{color:var(--danger);}
+#chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.chat-msg{display:flex;gap:10px;align-items:flex-start;}
+.chat-msg.user{flex-direction:row-reverse;}
+.chat-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:var(--green-mid);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.chat-msg.user .chat-avatar{background:var(--gold);color:var(--green);}
+.chat-bubble{max-width:75%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;}
+.chat-msg.bot .chat-bubble{background:rgba(212,168,67,.12);border:1px solid var(--gold);color:var(--text-light);}
+.chat-msg.user .chat-bubble{background:var(--gold);color:var(--green);border-radius:12px 12px 0 12px;font-weight:600;}
+.chat-msg.bot .chat-bubble{border-radius:12px 12px 12px 0;}
+.chat-typing{display:none;align-items:center;gap:4px;padding:10px 14px;background:rgba(212,168,67,.12);border:1px solid var(--gold);border-radius:12px;width:fit-content;}
+.chat-typing.show{display:flex;}
+.typing-dot{width:8px;height:8px;border-radius:50%;background:var(--gold-light);animation:typing .8s infinite;}
+.typing-dot:nth-child(2){animation-delay:.15s;}
+.typing-dot:nth-child(3){animation-delay:.3s;}
+@keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-4px);}}
+#chat-input-wrap{padding:16px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:8px;}
+#chat-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:10px 16px;color:#fff;font-size:13px;font-family:'Montserrat',sans-serif;outline:none;}
+#chat-input::placeholder{color:var(--text-muted);}
+#chat-input:focus{border-color:var(--gold);background:rgba(255,255,255,.09);}
+#chat-send{background:var(--gold);border:none;border-radius:50%;width:40px;height:40px;color:var(--green);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-weight:900;}
+#chat-send:hover{background:var(--gold-light);transform:scale(1.05);}
+#chat-send:disabled{background:#3a4a3a;cursor:not-allowed;}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.chat-suggest-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:6px 12px;font-size:11px;color:var(--text-light);cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif;font-weight:600;}
+.chat-suggest-btn:hover{border-color:var(--gold);background:rgba(212,168,67,.1);color:#fff;}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-brand">
+    <img src="images/redwood-logo.png" alt="Redwood Communication" class="nav-logo">
+    <div class="nav-pipe"></div>
+    <div class="nav-label">The Grove · Offer IQ</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <a href="index.html" class="nav-back">← Back to The Grove</a>
+    <div class="nav-pills">
+      <div class="nav-pill">Scene <b id="hud-scene">—</b> / 8</div>
+      <div class="nav-pill">Score: <b id="hud-score">0</b> / 100</div>
+    </div>
+  </div>
+</nav>
+<div id="pbar-wrap"><div id="pbar"></div></div>
+
+<!-- ══ SCREEN 0 — INTRO ══ -->
+<div class="screen active" id="s0">
+  <div class="intro-hero">
+    <div class="intro-logo-row">
+      <img src="images/redwood-logo.png" alt="Redwood Communication" style="height:54px;object-fit:contain;">
+      <div class="intro-divider"></div>
+      <div class="intro-logo-text">
+        <div class="dept">The Grove</div>
+        <div class="unit">Redwood Communication®</div>
+      </div>
+    </div>
+    <div class="intro-eyebrow">Interactive Training Simulator</div>
+    <div class="intro-title">Offer IQ</div>
+    <div class="intro-sub">Know Your Worth. Negotiate with Confidence.</div>
+    <div class="intro-role">Scenario: Entry-Level Learning &amp; Development Specialist</div>
+    <p class="intro-desc">Walk through a real job offer step-by-step. Decode compensation packages, spot red flags, benchmark your salary against live 2025 market data, and practice negotiating — all before you sign a thing.</p>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-item"><div class="stat-num">73%</div><div class="stat-lbl">Employers expect negotiation</div></div>
+    <div class="stat-item"><div class="stat-num">85%</div><div class="stat-lbl">Who negotiate get more</div></div>
+    <div class="stat-item"><div class="stat-num">$65,850</div><div class="stat-lbl">BLS median L&amp;D salary</div></div>
+    <div class="stat-item"><div class="stat-num">11%</div><div class="stat-lbl">Job growth through 2034</div></div>
+    <div class="stat-item"><div class="stat-num">18.8%</div><div class="stat-lbl">Avg raise from negotiating</div></div>
+  </div>
+
+  <div class="intro-body">
+    <h3>Select your major to personalize salary benchmarks</h3>
+    <div class="major-row" id="major-row">
+      <button class="mjr-btn sel" onclick="pickMajor(this,'Corporate Communication',58974)">📣 Corporate Communication</button>
+      <button class="mjr-btn" onclick="pickMajor(this,'Business Administration',62000)">📊 Business Administration</button>
+      <button class="mjr-btn" onclick="pickMajor(this,'Psychology',55000)">🧠 Psychology</button>
+      <button class="mjr-btn" onclick="pickMajor(this,'Education',52000)">📚 Education</button>
+      <button class="mjr-btn" onclick="pickMajor(this,'HR Management',60000)">👥 HR Management</button>
+      <button class="mjr-btn" onclick="pickMajor(this,'General / Other',58000)">🎓 General / Other</button>
+    </div>
+    <button class="btn-start" id="startBtn">Start Simulation →</button>
+    <p class="start-note">8 interactive scenes · ~15 minutes · Based on BLS, Salary.com &amp; NACE 2025 data</p>
+  </div>
+
+  <div class="sim-foot">
+    <strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a> · Supplemental Learning Resources
+  </div>
+</div>
+
+<!-- ══ SCREEN 1 — OFFER ARRIVES ══ -->
+<div class="screen" id="s1">
+  <div class="wrap fade-up">
+    <div class="scene-tag">Scene 1 · The Offer Arrives</div>
+    <h1 class="scene-h1">Congratulations — You Got the Offer! 🎉</h1>
+    <p class="scene-sub">You just graduated with a degree in <strong id="major-s1" style="color:var(--gold-light);">Corporate Communication</strong>. After three rounds of interviews at <strong>BrightPath Corporate Learning</strong> in Nashville, an email just landed in your inbox with a formal offer for <strong>Entry-Level Learning &amp; Development Specialist</strong>.</p>
+
+    <div class="dlg">
+      <img src="https://www.pexels.com/photo/confident-young-woman-in-business-attire-6953849/@@/download/72x72" class="av" alt="Jordan" onerror="this.style.display='none'">
+      <div class="dlg-body">
+        <div class="dn">Jordan Reeves</div>
+        <div class="dr">You · Recent Graduate</div>
+        <div class="ds">"This is amazing! I loved the team and the work sounds perfect. But… I've heard so many horror stories about accepting the first offer. Should I just sign it, or is there something I need to check first?"</div>
+      </div>
+    </div>
+
+    <div class="ibox">
+      📬 <strong>You've received:</strong> A 3-page formal offer letter from BrightPath Corporate Learning's HR Director. It includes salary, bonuses, benefits, start date, and legal clauses. Let's go through it together.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-p" onclick="go(2)">Open the Offer Letter →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- ══ SCREEN 2 — OFFER LETTER ══ -->
+<div class="screen" id="s2">
+  <div class="wrap">
+    <div class="scene-tag">Scene 2 · Decode the Offer</div>
+    <h1 class="scene-h1">Your Job Offer — Click Each Underlined Term</h1>
+    <p class="scene-sub">Read through the offer letter below. Tap any underlined term to see what it means, how to evaluate it, and what questions to ask. Once you've explored at least 6 terms, you can move forward.</p>
+
+    <div class="offer-letter">
+      <div class="ol-hd">
+        <div class="ol-co">BrightPath Corporate Learning</div>
+        <div class="ol-sub">Nashville, Tennessee · Official Offer of Employment</div>
+      </div>
+      <p class="ol-p"><strong>Dear Jordan Reeves,</strong></p>
+      <p class="ol-p">We are pleased to extend you an offer for the position of <strong>Entry-Level Learning &amp; Development Specialist</strong>, reporting to the Director of Talent Development, effective June 9, 2025.</p>
+      <p class="ol-p"><strong>Compensation &amp; Bonus:</strong><br>
+      Your <span class="term" onclick="showTip('base')">base salary</span> will be <span class="term flag" onclick="showTip('salary')">$57,500 per year</span>, paid bi-weekly. You are eligible for an <span class="term" onclick="showTip('bonus')">annual performance bonus</span> of <span class="term" onclick="showTip('bonuspct')">up to 8% of base salary</span>, evaluated each December. A <span class="term" onclick="showTip('signing')">signing bonus</span> of <span class="term flag" onclick="showTip('clawback')">$3,000 (12-month full repayment clause)</span> will be issued with your first paycheck.</p>
+      <p class="ol-p"><strong>Benefits:</strong><br>
+      BrightPath offers <span class="term good" onclick="showTip('health')">medical, dental, and vision insurance</span> with <span class="term" onclick="showTip('premium')">80% employer-paid premium</span>. We provide a <span class="term good" onclick="showTip('k401')">401(k) with 3% employer match</span> and <span class="term" onclick="showTip('pto')">12 days PTO</span> plus 10 federal holidays. Our team operates on a <span class="term good" onclick="showTip('remote')">fully remote schedule</span>.</p>
+      <p class="ol-p"><strong>L&amp;D Specialist Perks:</strong><br>
+      You will receive a <span class="term good" onclick="showTip('ldbdg')">$1,500 annual L&amp;D professional development budget</span> for certifications (CPTD, SHRM-CP) and conferences. Access to our enterprise <span class="term" onclick="showTip('lms')">Learning Management System (LMS)</span> and a <span class="term good" onclick="showTip('mentor')">structured 6-month onboarding mentorship</span> are also included.</p>
+      <p class="ol-p"><strong>Additional Terms:</strong><br>
+      This offer includes a <span class="term flag" onclick="showTip('noncompete')">12-month non-compete agreement</span> with direct corporate L&amp;D competitors, as well as an <span class="term" onclick="showTip('ip')">intellectual property assignment clause</span>. An <span class="term good" onclick="showTip('eap')">Employee Assistance Program (EAP)</span> is provided at no cost.</p>
+      <p class="ol-p"><strong>Start Date &amp; Response:</strong><br>
+      Proposed start: <span class="term" onclick="showTip('start')">June 9, 2025</span>. Please respond by <span class="term flag" onclick="showTip('deadline')">May 8, 2025 — 72-hour deadline</span>.</p>
+      <p class="ol-p" style="margin-top:28px;">We look forward to you joining BrightPath!<br><br>
+      <strong>Sarah Martinez</strong><br><em>HR Director, BrightPath Corporate Learning</em></p>
+    </div>
+
+    <div class="ibox" id="s2-status">
+      📖 <strong>Explored:</strong> <span id="term-ct" style="color:var(--gold-light);font-weight:900;">0</span> / 14 terms. Click at least 6 underlined terms to unlock the next scene.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-s" onclick="go(1)">← Back</button>
+      <button class="btn-p" id="s2next" onclick="go(3)" disabled>Benchmark the Salary →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- TOOLTIP OVERLAY -->
+<div id="tip-box">
+  <button id="tp-x" onclick="closeTip()">✕</button>
+  <div class="tp-tag" id="tp-tag"></div>
+  <div class="tp-hed" id="tp-hed"></div>
+  <div class="tp-bod" id="tp-bod"></div>
+  <div class="tp-stat" id="tp-stat"><div class="tp-sv" id="tp-sv"></div><div class="tp-sl" id="tp-sl"></div></div>
+</div>
+
+<!-- ══ SCREEN 3 — BENCHMARKS ══ -->
+<div class="screen" id="s3">
+  <div class="wrap">
+    <div class="scene-tag">Scene 3 · Benchmark the Salary</div>
+    <h1 class="scene-h1">Is $57,500 a Fair Starting Salary?</h1>
+    <p class="scene-sub">Let's compare this offer against real 2025 data for entry-level Learning &amp; Development Specialists.</p>
+
+    <div class="dlg">
+      <div class="dlg-body">
+        <div class="dn">Jordan Reeves</div>
+        <div class="dr">You</div>
+        <div class="ds">"So… $57,500. It <em>sounds</em> okay? But I genuinely don't know if that's low, high, or average for an L&amp;D role in Nashville. Let me check the benchmarks."</div>
+      </div>
+    </div>
+
+    <div class="bench-card">
+      <div class="bc-h">💰 Salary Comparison — Learning &amp; Development Specialist</div>
+      <div class="bc-row">
+        <div class="bc-lbl">📊 BLS National Median (2025)</div>
+        <div class="bc-bar"><div class="bc-fill" id="bar1" style="width:0%"></div></div>
+        <div class="bc-val">$65,850</div>
+      </div>
+      <div class="bc-row">
+        <div class="bc-lbl">📈 Nashville Market Avg (L&amp;D)</div>
+        <div class="bc-bar"><div class="bc-fill" id="bar2" style="width:0%"></div></div>
+        <div class="bc-val">$68,425</div>
+      </div>
+      <div class="bc-row">
+        <div class="bc-lbl">🎓 Entry-Level National Avg</div>
+        <div class="bc-bar"><div class="bc-fill" id="bar3" style="width:0%"></div></div>
+        <div class="bc-val">$58,974</div>
+      </div>
+      <div class="bc-row">
+        <div class="bc-lbl" id="bar4lab">🟦 Related Major Avg</div>
+        <div class="bc-bar"><div class="bc-fill" id="bar4" style="width:0%"></div></div>
+        <div class="bc-val" id="bar4val">$58,974</div>
+      </div>
+      <div class="bc-row">
+        <div class="bc-lbl">📄 This Offer (Base)</div>
+        <div class="bc-bar"><div class="bc-fill red" id="bar5" style="width:0%"></div></div>
+        <div class="bc-val">$57,500</div>
+      </div>
+    </div>
+
+    <div class="wbox">⚠️ <strong>Below Market:</strong> At $57,500, your base is <strong>$1,474 below the entry-level national average</strong> and <strong>$10,925 below Nashville's L&amp;D market rate</strong>. This is your primary negotiation leverage — cite these exact numbers in your counter-offer.</div>
+    <div class="gbox">✅ <strong>Good News:</strong> The $1,500 L&amp;D budget, 401(k) match, and fully remote setup add real value. Your <em>total compensation</em> may be competitive once benefits are included — but <strong>base salary is still the most important number</strong>, because all future raises and bonuses are calculated from it.</div>
+
+    <div class="btn-row">
+      <button class="btn-s" onclick="go(2)">← Back</button>
+      <button class="btn-p" onclick="go(4)">Explore the Benefits Package →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- ══ SCREEN 4 — BENEFITS ══ -->
+<div class="screen" id="s4">
+  <div class="wrap">
+    <div class="scene-tag">Scene 4 · Benefits Deep Dive</div>
+    <h1 class="scene-h1">Benefits Can Be Worth $10K–$20K+ Annually</h1>
+    <p class="scene-sub">Click each card to learn what the benefit is, how to evaluate it, and what questions to ask before signing.</p>
+    <div class="ben-grid" id="ben-grid"></div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text-muted);">Explored: <span id="ben-ct" style="color:var(--success);font-weight:800;">0</span> / 8 benefits</div>
+    <div class="btn-row">
+      <button class="btn-s" onclick="go(3)">← Back</button>
+      <button class="btn-p" onclick="go(5)">Spot the Red Flags →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- BENEFIT MODAL -->
+<div class="ben-overlay" id="ben-modal" style="display:none" onclick="closeBen(event)">
+  <div class="ben-modal">
+    <button class="bm-x" onclick="closeBen()">✕</button>
+    <div class="bm-icon" id="bm-ico"></div>
+    <div class="bm-title" id="bm-ttl"></div>
+    <div class="bm-cat" id="bm-cat"></div>
+    <div class="bm-desc" id="bm-dsc"></div>
+    <div class="bm-grid">
+      <div class="bm-pro"><strong>✅ What's Great</strong><span id="bm-pro"></span></div>
+      <div class="bm-con"><strong>⚠️ Watch For</strong><span id="bm-con"></span></div>
+    </div>
+    <div class="bm-tip-box"><strong style="color:var(--gold);">💡 Question to ask: </strong><span id="bm-tip"></span></div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 5 — RED FLAGS ══ -->
+<div class="screen" id="s5">
+  <div class="wrap">
+    <div class="scene-tag">Scene 5 · Red Flag Detector</div>
+    <h1 class="scene-h1">Which Terms Are Red Flags? 🚩</h1>
+    <p class="scene-sub">Read each clause below. Click the ones you believe are red flags or concerning. You'll gain points for correct flags and lose points for false alarms.</p>
+    <div class="quiz-grid" id="quiz-grid"></div>
+    <div class="btn-row">
+      <button class="btn-s" onclick="go(4)">← Back</button>
+      <button class="btn-p" id="checkbtn" onclick="checkQuiz()">Check My Answers →</button>
+      <button class="btn-p" id="s5next" onclick="go(6)" style="display:none;">Assess the Full Offer →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- ══ SCREEN 6 — ASSESS OFFER ══ -->
+<div class="screen" id="s6">
+  <div class="wrap">
+    <div class="scene-tag">Scene 6 · Full Offer Assessment</div>
+    <h1 class="scene-h1">Evaluate the Complete Package</h1>
+    <p class="scene-sub">Now that you understand the salary, benefits, and red flags, rate each category and build your negotiation checklist.</p>
+    <div id="acat-wrap"></div>
+    <div class="ibox" style="margin-top:22px;">
+      💼 <strong>Career Context:</strong> Entry-level L&amp;D specialists in Nashville typically earn $58,974–$68,425 with standard benefits. This offer's base is low, but the L&amp;D budget, remote flexibility, and mentorship add value. Your negotiation goal: increase base to $61,000–$63,000 (market rate for your experience + degree).
+    </div>
+    <div style="background:var(--green-card);border:1px solid var(--card-bdr);border-radius:12px;padding:26px;margin-top:20px;">
+      <div style="font-size:16px;font-weight:800;margin-bottom:14px;">📝 Your Negotiation Checklist</div>
+      <div id="checklist"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-s" onclick="go(5)">← Back</button>
+      <button class="btn-p" onclick="go(7)">Practice the Negotiation →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- ══ SCREEN 7 — NEGOTIATION ══ -->
+<div class="screen" id="s7">
+  <div class="wrap">
+    <div class="scene-tag">Scene 7 · Negotiation Simulation</div>
+    <h1 class="scene-h1">Practice Your Negotiation — 4 Rounds</h1>
+    <p class="scene-sub">Sarah (HR Director) is on the phone. You have four opportunities to negotiate. Choose your responses wisely — collaborative, data-driven language earns more points.</p>
+    <div class="dlg">
+      <div class="dlg-body">
+        <div class="dn">Sarah Martinez</div>
+        <div class="dr">HR Director · BrightPath</div>
+        <div class="ds">"Hi Jordan! Thanks for taking my call. I wanted to check in — have you had a chance to review the offer? Do you have any questions or concerns?"</div>
+      </div>
+    </div>
+    <div id="neg-rounds"></div>
+    <div class="btn-row">
+      <button class="btn-s" onclick="go(6)">← Back</button>
+      <button class="btn-p" id="s7next" onclick="go(8)" style="display:none;">View Your Results →</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<!-- ══ SCREEN 8 — RESULTS ══ -->
+<div class="screen" id="s8">
+  <div class="wrap">
+    <div class="scene-tag">Scene 8 · Your Results</div>
+    <h1 class="scene-h1">Congratulations! You Completed the Simulation 🎉</h1>
+    <p class="scene-sub">Here's how you performed across all scenes, plus a personalized checklist for your next real offer.</p>
+
+    <div class="res-hero">
+      <div class="res-ring-wrap">
+        <div id="ring"><div id="ring-n">0</div></div>
+      </div>
+      <div class="res-tier" id="tier-txt">—</div>
+      <div class="res-sum">Your final score reflects how well you identified compensation components, flagged concerns, and negotiated strategically. Review the checklist below to level up for your next offer.</div>
+    </div>
+
+    <div class="cl-wrap">
+      <h3>📋 Your Final Negotiation Checklist</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px;line-height:1.7;">Based on your performance, here are the most important takeaways. Click each box as you master it:</p>
+      <div id="final-cl"></div>
+    </div>
+
+    <!-- CERTIFICATE -->
+    <div class="cert" id="cert-section">
+      <div class="cert-header">
+        <img src="images/redwood-logo.png" alt="Redwood Communication" class="cert-logo">
+        <div class="cert-pipe"></div>
+        <div class="cert-header-text">
+          <div class="grove">The Grove</div>
+          <div class="brand">Redwood Communication®</div>
+        </div>
+      </div>
+      <div class="cert-ttl">Certificate of Completion</div>
+      <h2 class="cert-h1">Offer <span>IQ</span></h2>
+      <div class="cert-gold-bar"></div>
+      <div class="cert-bod">This certifies that</div>
+      <div class="cert-stu" id="cert-name">Student</div>
+      <div class="cert-scenario">has successfully completed the<br><strong>Job Offer Negotiation Simulator</strong><br>and demonstrated applied negotiation skills.</div>
+      <div class="cert-foot">
+        <div class="cf-col">
+          <div class="cf-sig">Rob Razzante, PhD</div>
+          <div>Redwood Communication®</div>
+        </div>
+        <div class="cf-col">
+          <div class="cf-sig" id="cert-date">—</div>
+          <div>The Grove · thegrove.redwoodcommunication.com</div>
+        </div>
+      </div>
+      <button class="cert-linkedin" onclick="shareCert()">Share on LinkedIn →</button>
+    </div>
+
+    <div style="margin-top:12px;text-align:center;font-size:12px;color:var(--text-muted);">
+      Tip: Right-click the certificate above and "Save image" or use your browser's Print to PDF to save it.
+    </div>
+
+    <div class="btn-row" style="justify-content:center;margin-top:32px;">
+      <button class="btn-start" style="max-width:280px;" onclick="restart()">🔄 Restart Simulation</button>
+    </div>
+  </div>
+  <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
+</div>
+
+<script>
+var S = { major:'Corporate Communication', majorAvg:58974, score:0 };
+var expSet = new Set();
+var benExp = new Set();
+var selFlags = new Set();
+var flagsDone = false;
+var negStep = 0;
+var negPts = 0;
+
+function pickMajor(el, name, avg) {
+  document.querySelectorAll('.mjr-btn').forEach(function(b){ b.classList.remove('sel'); });
+  el.classList.add('sel');
+  S.major = name; S.majorAvg = avg;
+}
+
+function updHUD() {
+  document.getElementById('hud-score').textContent = Math.min(100, S.score);
+}
+
+function go(n) {
+  document.querySelectorAll('.screen').forEach(function(sc){ sc.classList.remove('active'); });
+  var el = document.getElementById('s' + n);
+  if (el) el.classList.add('active');
+  window.scrollTo(0, 0);
+  var pct = (n === 0) ? 0 : Math.round(n / 8 * 100);
+  document.getElementById('pbar').style.width = pct + '%';
+  document.getElementById('hud-scene').textContent = (n === 0) ? '—' : n;
+  updHUD();
+  if (n === 1) initS1();
+  if (n === 3) initS3();
+  if (n === 4) initS4();
+  if (n === 5) initS5();
+  if (n === 6) initS6();
+  if (n === 7) initS7();
+  if (n === 8) initS8();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('startBtn').addEventListener('click', function() { go(1); });
+});
+
+function initS1() {
+  document.getElementById('major-s1').textContent = S.major;
+}
+
+var TIPS = {
+  base:      { tag:'Core Financial', hed:'Base Salary', bod:'Your guaranteed annual income before taxes, bonuses, or extras. It\'s the foundation of your total compensation — all future raises, bonus percentages, and 401k contributions are calculated from this number. It\'s the most important figure to negotiate.', s:{ v:'$57,500/yr', l:'Paid bi-weekly — your budgeting baseline' } },
+  salary:    { tag:'🚩 Below Market', hed:'$57,500 — Below Entry-Level Average', bod:'This base is $1,474 below the national entry-level average for L&D specialists ($58,974) and $10,925 below Nashville\'s market rate ($68,425). These exact numbers are your leverage when you counter-offer. Cite them directly.', s:{ v:'-$10,925', l:'Below Nashville L&D market average' } },
+  bonus:     { tag:'Variable Pay', hed:'Annual Performance Bonus', bod:'An extra payment tied to hitting specific performance targets. These are NOT guaranteed — ask for the exact criteria in writing. Common metrics in L&D: training completion rates, learner satisfaction scores, time-to-competency improvements.', s:{ v:'Up to 8%', l:'= Up to $4,600/yr at full payout' } },
+  bonuspct:  { tag:'Bonus Details', hed:'8% Performance Bonus Target', bod:'Up to $4,600/year. Industry average for L&D entry-level bonuses is 5–12%, so 8% is solid. However, "up to 8%" can mean $0 if targets aren\'t clearly defined. Always ask: "What percentage of employees received the full bonus last year?"', s:{ v:'$4,600 max', l:'If 100% of targets are met' } },
+  signing:   { tag:'One-Time Payment', hed:'Signing Bonus', bod:'A one-time payment when you start — designed to attract candidates or offset competing offers. Always check for clawback/repayment clauses before celebrating. A $3,000 signing bonus is modest and also a negotiation point.', s:{ v:'$3,000', l:'Year 1 only — read the fine print!' } },
+  clawback:  { tag:'🚩 Repayment Clause', hed:'12-Month Full Clawback', bod:'If you leave (voluntarily or not) within 12 months, you must repay the ENTIRE $3,000 signing bonus — often taken directly from your final paycheck. This is a red flag. Negotiate it down to 6 months or pro-rate it (e.g., $250/month repayment).', s:{ v:'$3,000 owed back', l:'If you leave within the first year' } },
+  health:    { tag:'Core Benefit', hed:'Health Insurance (Medical, Dental, Vision)', bod:'Employer-sponsored health insurance is one of the most valuable benefits, often worth $7,000–$12,000/year. BrightPath covers 80% of the premium, meaning you pay ~$120–$180/month out-of-pocket. Ask: "What\'s the deductible? Is there an HSA option?"', s:{ v:'~$7,200/yr value', l:'If employer covers 80% of $9,000 premium' } },
+  premium:   { tag:'Premium Cost-Share', hed:'80% Employer-Paid Premium', bod:'BrightPath pays 80% of your health insurance premium; you pay the remaining 20%. Industry standard is 70–85%. The higher the employer contribution, the better. Ask about the deductible and out-of-pocket max.', s:{ v:'~$1,800/yr', l:'Your estimated annual cost (20%)' } },
+  k401:      { tag:'Retirement Benefit', hed:'401(k) with 3% Employer Match', bod:'For every dollar you contribute to your 401(k) (up to 3% of your salary), BrightPath contributes $1. This is FREE MONEY. At $57,500 salary, 3% = $1,725/year. Always contribute at least enough to get the full match. Ask: "Is the match immediate or does it vest over time?"', s:{ v:'$1,725/yr', l:'Free retirement contribution from employer' } },
+  pto:       { tag:'Time Off', hed:'12 Days PTO + 10 Holidays', bod:'PTO (Paid Time Off) includes vacation, sick days, and personal leave. 12 days is on the lower end for professional roles (15–20 is standard). However, 10 federal holidays helps. Ask: "Does PTO roll over year-to-year? Can I buy extra days?" This is negotiable.', s:{ v:'22 total days', l:'12 PTO + 10 holidays' } },
+  remote:    { tag:'Work Flexibility', hed:'Fully Remote Schedule', bod:'You can work from anywhere in the U.S. (typically). This saves commute time (~10 hrs/week), gas/parking (~$300/mo), and wardrobe costs. Remote work is highly valued. Ask: "Are there any in-office requirements? Can I work from another state?"', s:{ v:'~$3,600/yr', l:'Saved in commute + parking + lunch' } },
+  ldbdg:     { tag:'Professional Development', hed:'$1,500 Annual L&D Budget', bod:'This budget covers certifications (CPTD, SHRM-CP), conferences (ATD, SHRM Annual), courses, and books. CPTD certification alone costs ~$700. Ask: "Can unused budget roll over? Is there approval required for each expense?"', s:{ v:'$1,500/yr', l:'Covers 2 certifications + 1 conference' } },
+  lms:       { tag:'Learning Tools', hed:'Enterprise LMS Access', bod:'Access to a Learning Management System (Cornerstone, Docebo, or similar) lets you build courses, track learner progress, and develop professional skills. This is hands-on experience with industry-standard tools. Ask: "Which LMS platform do you use?"', s:{ v:'Industry tool', l:'Resume-building experience' } },
+  mentor:    { tag:'Onboarding Support', hed:'6-Month Mentorship Program', bod:'You\'ll be paired with a senior L&D professional for guidance, feedback, and career advice during your first 6 months. This accelerates your learning curve and builds internal relationships. Ask: "Who assigns mentors? Can I choose my mentor based on my career goals?"', s:{ v:'6 months', l:'Structured guidance from senior staff' } },
+  noncompete:{ tag:'🚩 Legal Restriction', hed:'12-Month Non-Compete Agreement', bod:'This clause prevents you from working for a "direct corporate L&D competitor" for 12 months after leaving. Tennessee DOES enforce non-competes if they\'re reasonable. Ask: "Who is considered a competitor? Does this include freelance L&D work?" Negotiate to 6 months or narrow the scope.', s:{ v:'12 months', l:'Could limit your next job options' } },
+  ip:        { tag:'Legal Clause', hed:'Intellectual Property Assignment', bod:'Any training materials, courses, or content you create while employed belong to BrightPath, not you. This is standard but worth clarifying: "Does this include content I create on personal time using personal tools?"', s:{ v:'Standard', l:'Your work product = company property' } },
+  eap:       { tag:'Wellness Benefit', hed:'Employee Assistance Program (EAP)', bod:'Free confidential counseling, mental health support, financial planning, and legal advice (typically 3–8 sessions/year per issue). EAPs are underutilized but valuable. Ask: "How many sessions are covered? Is family counseling included?"', s:{ v:'Free', l:'3–8 sessions/year per issue' } },
+  start:     { tag:'Start Date', hed:'June 9, 2025', bod:'Your proposed first day. If you need more time (to finish school, relocate, or give notice), this is negotiable. Standard notice is 2 weeks; some roles require 30 days. Ask: "Is there flexibility on the start date if needed?"', s:{ v:'June 9, 2025', l:'Negotiable if you need more time' } },
+  deadline:  { tag:'🚩 Response Deadline', hed:'72-Hour Deadline (May 8)', bod:'BrightPath wants your decision in 3 days. Industry standard is 5–7 business days, and you can ask for more. Fast deadlines pressure you into accepting without fully evaluating. Say: "I\'d like 7 business days to review this offer with my advisors. Is that possible?"', s:{ v:'3 days', l:'Too short — ask for 5–7 business days' } }
+};
+
+function showTip(key) {
+  var t = TIPS[key];
+  if (!t) return;
+  expSet.add(key);
+  document.getElementById('term-ct').textContent = expSet.size;
+  if (expSet.size >= 6) {
+    document.getElementById('s2next').disabled = false;
+    S.score += 10; updHUD();
+  }
+  document.getElementById('tp-tag').textContent = t.tag;
+  document.getElementById('tp-hed').textContent = t.hed;
+  document.getElementById('tp-bod').textContent = t.bod;
+  document.getElementById('tp-sv').textContent = t.s.v;
+  document.getElementById('tp-sl').textContent = t.s.l;
+  document.getElementById('tip-box').classList.add('show');
+}
+function closeTip() { document.getElementById('tip-box').classList.remove('show'); }
+
+function initS3() {
+  S.score += 5; updHUD();
+  setTimeout(function() {
+    document.getElementById('bar1').style.width = '94%';
+    document.getElementById('bar2').style.width = '100%';
+    document.getElementById('bar3').style.width = '86%';
+    var pct4 = Math.round(S.majorAvg / 68425 * 100);
+    document.getElementById('bar4').style.width = pct4 + '%';
+    document.getElementById('bar5').style.width = '84%';
+    document.getElementById('bar4lab').textContent = '🎓 ' + S.major + ' Avg';
+    document.getElementById('bar4val').textContent = '$' + S.majorAvg.toLocaleString();
+  }, 300);
+}
+
+var BENS = [
+  { ic:'🏥', tt:'Health Insurance', cat:'Wellness', dsc:'Employer-sponsored medical, dental, and vision coverage with 80% employer-paid premium. Estimated value: ~$7,200/year.', pro:'Covers most medical expenses; family coverage available', con:'20% employee cost-share (~$1,800/yr); check deductible', tip:'"What\'s the annual deductible and out-of-pocket max? Is there an HSA option?"' },
+  { ic:'🏦', tt:'401(k) Match', cat:'Retirement', dsc:'3% employer match on 401(k) contributions. At $57,500 salary, that\'s $1,725/year of free money.', pro:'Immediate free retirement contribution; compounds over decades', con:'Only 3% match; ask about vesting schedule', tip:'"Does the match vest immediately, or is there a vesting schedule?"' },
+  { ic:'🏝️', tt:'12 Days PTO', cat:'Time Off', dsc:'12 days of paid time off plus 10 federal holidays (22 total days off per year).', pro:'Flexible use for vacation, sick days, personal leave', con:'12 days is below industry average (15–20 is standard)', tip:'"Does unused PTO roll over? Can I buy additional days?"' },
+  { ic:'💻', tt:'Fully Remote', cat:'Flexibility', dsc:'Work from anywhere in the U.S. — no commute, no office politics, full schedule control.', pro:'Saves ~$3,600/yr in commute, parking, lunches', con:'Can feel isolating; verify any in-office requirements', tip:'"Are there any required in-office days? Can I work from another state?"' },
+  { ic:'📚', tt:'$1,500 L&D Budget', cat:'Professional Growth', dsc:'Annual budget for certifications (CPTD, SHRM-CP), conferences, courses, and books.', pro:'Covers 1–2 certifications + 1 conference; boosts resume', con:'May require approval for each expense; verify rollover policy', tip:'"Can unused budget roll over? Is pre-approval required?"' },
+  { ic:'🖥️', tt:'Enterprise LMS Access', cat:'Learning Tools', dsc:'Hands-on experience with industry-standard Learning Management Systems.', pro:'Build real courses; add to your portfolio; learn professional tools', con:'LMS quality varies by vendor; ask which platform they use', tip:'"Which LMS platform does BrightPath use? Will I get admin access?"' },
+  { ic:'🤝', tt:'6-Month Mentorship', cat:'Career Support', dsc:'Structured onboarding program pairing you with a senior L&D professional.', pro:'Accelerates learning; builds internal network', con:'Mentor quality varies; ask if you can choose your mentor', tip:'"Who assigns mentors? Can I request a mentor based on my career goals?"' },
+  { ic:'🧘', tt:'EAP (Free Counseling)', cat:'Wellness', dsc:'Employee Assistance Program: free confidential counseling, mental health support, financial planning, legal advice.', pro:'3–8 free sessions/year per issue; covers family', con:'Limited sessions; not a replacement for long-term therapy', tip:'"How many EAP sessions are covered? Is family counseling included?"' }
+];
+
+function initS4() {
+  S.score += 5; updHUD();
+  var g = document.getElementById('ben-grid'); g.innerHTML = '';
+  BENS.forEach(function(b,i) {
+    var c = document.createElement('div');
+    c.className = 'ben-card';
+    c.innerHTML = '<div class="bic">' + b.ic + '</div><div class="bit">' + b.tt + '</div><div class="bid">' + b.cat + '</div>';
+    c.onclick = function() { openBen(i); };
+    g.appendChild(c);
+  });
+}
+function openBen(i) {
+  var b = BENS[i];
+  benExp.add(i);
+  document.getElementById('ben-ct').textContent = benExp.size;
+  if (benExp.size === 8 && S.score < 50) { S.score += 10; updHUD(); }
+  document.querySelectorAll('.ben-card')[i].classList.add('exp');
+  document.getElementById('bm-ico').textContent = b.ic;
+  document.getElementById('bm-ttl').textContent = b.tt;
+  document.getElementById('bm-cat').textContent = b.cat;
+  document.getElementById('bm-dsc').textContent = b.dsc;
+  document.getElementById('bm-pro').textContent = b.pro;
+  document.getElementById('bm-con').textContent = b.con;
+  document.getElementById('bm-tip').textContent = b.tip;
+  document.getElementById('ben-modal').style.display = 'flex';
+}
+function closeBen(e) {
+  if (e && e.target.id !== 'ben-modal') return;
+  document.getElementById('ben-modal').style.display = 'none';
+}
+
+var QUIZ = [
+  { txt:'$3,000 signing bonus with full repayment required if you leave within 12 months', flag:true },
+  { txt:'12-month non-compete agreement preventing work with "direct corporate L&D competitors"', flag:true },
+  { txt:'Annual performance bonus "up to 8%" with no written criteria or KPIs provided', flag:true },
+  { txt:'72-hour response deadline (May 8) — only 3 days to decide', flag:true },
+  { txt:'Health insurance with 80% employer-paid premium and family coverage available', flag:false },
+  { txt:'401(k) retirement plan with 3% employer match', flag:false },
+  { txt:'$1,500 annual professional development budget for certifications and conferences', flag:false },
+  { txt:'Fully remote work schedule with no required in-office days', flag:false },
+  { txt:'Intellectual property assignment clause (standard for most companies)', flag:false },
+  { txt:'12 days PTO plus 10 federal holidays (22 total days off)', flag:false }
+];
+
+function initS5() {
+  S.score += 5; updHUD();
+  var g = document.getElementById('quiz-grid'); g.innerHTML = '';
+  QUIZ.forEach(function(q,i) {
+    var d = document.createElement('div');
+    d.className = 'qcard';
+    d.innerHTML = '<div class="qb"></div><div class="qt">' + q.txt + '</div>';
+    d.onclick = function() { toggleQ(i, d); };
+    g.appendChild(d);
+  });
+}
+function toggleQ(i, el) {
+  if (flagsDone) return;
+  if (selFlags.has(i)) { selFlags.delete(i); el.classList.remove('picked'); }
+  else { selFlags.add(i); el.classList.add('picked'); }
+}
+function checkQuiz() {
+  if (flagsDone) return;
+  flagsDone = true;
+  var correct = 0, wrong = 0;
+  QUIZ.forEach(function(q,i) {
+    var picked = selFlags.has(i);
+    if (q.flag && picked) correct++;
+    if (!q.flag && picked) wrong++;
+  });
+  var pts = correct * 4 - wrong * 2;
+  S.score += pts; updHUD();
+  var vb = document.querySelector('.verdict');
+  if (!vb) {
+    vb = document.createElement('div');
+    vb.className = 'verdict v-good';
+    vb.innerHTML = '<div class="v-ico"></div><div><div class="v-ttl"></div><div class="v-bod"></div></div>';
+    document.getElementById('quiz-grid').insertAdjacentElement('afterend', vb);
+  }
+  if (pts >= 12) {
+    vb.className = 'verdict v-good';
+    vb.querySelector('.v-ico').textContent = '✅';
+    vb.querySelector('.v-ttl').textContent = 'Excellent Eye for Detail!';
+    vb.querySelector('.v-bod').textContent = 'You correctly identified ' + correct + ' red flags. The 4 main red flags: signing bonus clawback (12mo), non-compete (12mo), vague bonus criteria, and 72-hour deadline. Score: +' + pts + ' pts.';
+  } else if (pts >= 6) {
+    vb.className = 'verdict v-warn';
+    vb.querySelector('.v-ico').textContent = '⚠️';
+    vb.querySelector('.v-ttl').textContent = 'Good Start — Room to Improve';
+    vb.querySelector('.v-bod').textContent = 'You caught ' + correct + ' red flags but had ' + wrong + ' false alarms. Key red flags: clawback period, non-compete scope, vague bonus language, short decision deadlines. Score: +' + pts + ' pts.';
+  } else {
+    vb.className = 'verdict v-bad';
+    vb.querySelector('.v-ico').textContent = '🚩';
+    vb.querySelector('.v-ttl').textContent = 'Review the Red Flags';
+    vb.querySelector('.v-bod').textContent = 'Red flags in this offer: (1) 12-month signing bonus clawback, (2) 12-month non-compete, (3) vague "up to 8%" bonus with no criteria, (4) 72-hour deadline. Benefits like health insurance and 401k are NOT red flags. Score: +' + pts + ' pts.';
+  }
+  document.getElementById('checkbtn').style.display = 'none';
+  document.getElementById('s5next').style.display = 'inline-block';
+}
+
+var ASSESS = [
+  { cat:'💰 Base Salary', score:2, sum:'$57,500 is $1,474 below entry-level avg and $10,925 below Nashville market. Strong negotiation case.' },
+  { cat:'🎁 Bonuses & Extras', score:3, sum:'8% performance bonus + $3,000 signing bonus (with clawback). Bonus criteria need clarification.' },
+  { cat:'🏥 Benefits Package', score:4, sum:'Health insurance (80% paid), 401k match (3%), 12 days PTO, fully remote. Solid but not exceptional.' },
+  { cat:'📚 L&D Perks', score:5, sum:'$1,500 budget, LMS access, 6-month mentorship. Excellent for career growth.' },
+  { cat:'🚩 Red Flags', score:2, sum:'Clawback (12mo), non-compete (12mo), vague bonus, 72-hr deadline. All negotiable.' }
+];
+var CHECKLIST = [
+  'Request 5–7 business days to review the offer (not 72 hours)',
+  'Counter-offer the base salary to $61,000–$63,000 citing Nashville L&D market data',
+  'Ask for written bonus criteria and KPIs before accepting',
+  'Negotiate the signing bonus clawback down to 6 months (or pro-rate it)',
+  'Request the non-compete be reduced to 6 months or narrowed in scope',
+  'Confirm whether the 401(k) match vests immediately or on a schedule',
+  'Ask if unused PTO rolls over year-to-year',
+  'Clarify whether the $1,500 L&D budget can roll over or requires pre-approval',
+  'Request a copy of the employee handbook to review policies before signing',
+  'Have an employment attorney review the non-compete clause'
+];
+
+function initS6() {
+  S.score += 5; updHUD();
+  var w = document.getElementById('acat-wrap'); w.innerHTML = '';
+  ASSESS.forEach(function(a) {
+    var d = document.createElement('div');
+    d.className = 'acat';
+    var boxes = '';
+    for (var i = 0; i < 5; i++) { boxes += '<div class="asc-box' + (i < a.score ? ' on' : '') + '"></div>'; }
+    d.innerHTML = '<div class="acat-h">' + a.cat + '</div><div class="asc-row">' + boxes + '</div><div class="acat-sum">' + a.sum + '</div>';
+    w.appendChild(d);
+  });
+  var cl = document.getElementById('checklist'); cl.innerHTML = '';
+  CHECKLIST.forEach(function(item, i) {
+    cl.innerHTML += '<div class="cl-row"><div class="cl-box" id="cl' + i + '" onclick="toggleCL(' + i + ')"></div><div class="cl-txt" id="clt' + i + '">' + item + '</div></div>';
+  });
+}
+function toggleCL(i) {
+  var b = document.getElementById('cl' + i), t = document.getElementById('clt' + i);
+  if (b.classList.contains('on')) { b.classList.remove('on'); t.classList.remove('done'); }
+  else { b.classList.add('on'); t.classList.add('done'); }
+}
+
+var NEG = [
+  { q:'Thanks for taking my call! Have you had any chance to review the offer?',
+    opts:[
+      { txt:'Yes! I\'m really excited. The role sounds perfect and I\'m ready to accept right away.', pts:0 },
+      { txt:'Yes, I have. I\'m very interested in the role. I do have a few questions about the compensation and terms before I finalize my decision.', pts:5 },
+      { txt:'I looked it over, but I need at least a week to think about it. Can you give me more time?', pts:2 }
+    ]
+  },
+  { q:'Great! What questions do you have?',
+    opts:[
+      { txt:'The base salary is $57,500. I was hoping for something closer to $65,000. Can you do that?', pts:2 },
+      { txt:'I noticed the base is $57,500, which is $10,925 below the Nashville L&D market average of $68,425 according to Salary.com and ZipRecruiter. Would there be flexibility to bring the base closer to $61,000 or $63,000 to align with the market?', pts:8 },
+      { txt:'I don\'t really have questions. The salary is a bit low, but I guess it\'s fine.', pts:0 }
+    ]
+  },
+  { q:'I appreciate you doing your research. Let me talk to the team. Is there anything else you\'d like to discuss?',
+    opts:[
+      { txt:'Yes — the $3,000 signing bonus has a 12-month full repayment clause. Would it be possible to reduce that to 6 months or pro-rate it monthly?', pts:6 },
+      { txt:'No, that\'s it. I\'ll wait to hear back from you.', pts:0 },
+      { txt:'Actually, can you also clarify the bonus criteria? The offer says "up to 8%" but doesn\'t specify the KPIs. I\'d like to see that in writing.', pts:7 }
+    ]
+  },
+  { q:'Those are fair points. I\'ll bring them to leadership. Anything else before we wrap up?',
+    opts:[
+      { txt:'One last thing — the 72-hour deadline is tight. Would it be possible to extend that to 5–7 business days so I can review everything with my advisors?', pts:5 },
+      { txt:'Nope, that\'s everything. Thanks for being open to discussion!', pts:3 },
+      { txt:'Actually, I\'m also concerned about the 12-month non-compete. I\'d like to narrow the scope or reduce it to 6 months.', pts:6 }
+    ]
+  }
+];
+
+function initS7() {
+  S.score += 5; updHUD();
+  var r = document.getElementById('neg-rounds'); r.innerHTML = '';
+  NEG.forEach(function(n,i) {
+    var d = document.createElement('div');
+    d.className = 'nround';
+    d.innerHTML = '<div class="nr-h">Round ' + (i + 1) + ' / 4</div><div class="nr-q">' + n.q + '</div>';
+    var choices = document.createElement('div');
+    n.opts.forEach(function(o) {
+      var b = document.createElement('button');
+      b.className = 'nopt';
+      b.textContent = o.txt;
+      b.onclick = function() { chooseNeg(choices, b); };
+      b.dataset.pts = o.pts;
+      choices.appendChild(b);
+    });
+    d.appendChild(choices);
+    r.appendChild(d);
+  });
+}
+function chooseNeg(choices, btn) {
+  if (btn.classList.contains('sel')) return;
+  Array.from(choices.children).forEach(function(b) { b.classList.remove('sel'); b.disabled = true; });
+  btn.classList.add('sel');
+  negPts += parseInt(btn.dataset.pts);
+  negStep++;
+  if (negStep === 4) finishNeg();
+}
+function finishNeg() {
+  S.score += negPts; updHUD();
+  var vb = document.createElement('div');
+  if (negPts >= 20) {
+    vb.className = 'verdict v-good';
+    vb.innerHTML = '<div class="v-ico">🏆</div><div><div class="v-ttl">Expert Negotiator!</div><div class="v-bod">You stayed collaborative, cited specific data, and addressed multiple terms. This is exactly how to negotiate in real life. Score: +' + negPts + ' pts</div></div>';
+  } else if (negPts >= 12) {
+    vb.className = 'verdict v-warn';
+    vb.innerHTML = '<div class="v-ico">👍</div><div><div class="v-ttl">Solid Effort!</div><div class="v-bod">Good progress, but you left some value behind. Next time: always cite specific salary benchmarks and address multiple terms in sequence. Score: +' + negPts + ' pts</div></div>';
+  } else {
+    vb.className = 'verdict v-bad';
+    vb.innerHTML = '<div class="v-ico">📚</div><div><div class="v-ttl">Learning Opportunity</div><div class="v-bod">Core lesson: stay collaborative, cite real data (BLS $65,850; Nashville $68,425), and make specific asks. Score: +' + negPts + ' pts</div></div>';
+  }
+  document.getElementById('neg-rounds').appendChild(vb);
+  document.getElementById('s7next').style.display = 'inline-block';
+}
+
+function initS8() {
+  var fin = Math.min(100, S.score);
+  animRing(fin);
+  document.getElementById('tier-txt').textContent =
+    fin >= 85 ? '🏆 Offer IQ: Expert — You\'re ready for the real thing!' :
+    fin >= 65 ? '👍 Offer IQ: Proficient — Solid foundation, keep practicing' :
+    fin >= 45 ? '📈 Offer IQ: Developing — Review the key takeaways below' :
+                '📚 Offer IQ: Beginner — Try again with fresh eyes!';
+  var items = [
+    'Research L&D salaries on BLS.gov, Salary.com, Glassdoor, and ZipRecruiter (Nashville avg: $68,425)',
+    'Calculate TOTAL compensation — base + bonus + 401k match + health insurance + L&D budget + remote savings',
+    'Identify all red flags before responding (clawbacks, non-competes, vague bonus language, short deadlines)',
+    'Always request 5–7 business days to review any formal offer',
+    'Prepare a specific counter-offer citing real salary benchmarks (BLS, Salary.com, Glassdoor)',
+    'Negotiate salary AND benefits: L&D budget, clawback period, start date, bonus criteria',
+    'Ask whether the 401k match is immediate or vests on a schedule',
+    'Have an employment attorney review any non-compete before signing',
+    'Ask about the bonus KPIs in writing — vague bonus language protects the employer, not you',
+    'Get ALL verbal agreements confirmed in writing before countersigning the offer'
+  ];
+  var fcl = document.getElementById('final-cl'); fcl.innerHTML = '';
+  items.forEach(function(item, i) {
+    fcl.innerHTML += '<div class="cl-row"><div class="cl-box" id="fc' + i + '" onclick="toggleFC(' + i + ')"></div><div class="cl-txt" id="ft' + i + '">' + item + '</div></div>';
+  });
+
+  var now = new Date();
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cert-date').textContent = months[now.getMonth()] + ' ' + now.getFullYear();
+
+  var nameInput = document.getElementById('cert-name-input');
+  if (!nameInput) {
+    var nameEl = document.getElementById('cert-name');
+    nameEl.innerHTML = '<input id="cert-name-input" type="text" placeholder="Enter your name" style="font-family:\'EB Garamond\',serif;font-style:italic;font-size:22px;font-weight:700;color:var(--green);border:none;border-bottom:2px solid var(--gold);background:transparent;text-align:center;width:300px;outline:none;padding:4px 8px;">';
+  }
+}
+function toggleFC(i) {
+  var b = document.getElementById('fc' + i), t = document.getElementById('ft' + i);
+  if (b.classList.contains('on')) { b.classList.remove('on'); t.classList.remove('done'); }
+  else { b.classList.add('on'); t.classList.add('done'); }
+}
+function animRing(target) {
+  var n = 0, el = document.getElementById('ring-n'), ring = document.getElementById('ring');
+  var iv = setInterval(function() {
+    n = Math.min(n + 2, target);
+    el.textContent = n;
+    ring.style.background = 'conic-gradient(var(--gold) ' + Math.round(n / 100 * 360) + 'deg, var(--green-card) 0deg)';
+    if (n >= target) clearInterval(iv);
+  }, 18);
+}
+function shareCert() {
+  var nameEl = document.getElementById('cert-name-input');
+  var name = nameEl ? nameEl.value || 'a student' : 'a student';
+  var text = encodeURIComponent('I just completed "Offer IQ" — a job offer negotiation simulator by Redwood Communication® — and earned a score of ' + Math.min(100, S.score) + '/100! Check out The Grove for free learning tools: https://thegrove.redwoodcommunication.com');
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://thegrove.redwoodcommunication.com') + '&summary=' + text, '_blank');
+}
+function restart() {
+  S = { major:'Corporate Communication', majorAvg:58974, score:0 };
+  expSet = new Set(); benExp = new Set(); selFlags = new Set();
+  flagsDone = false; negStep = 0; negPts = 0;
+  updHUD();
+  document.querySelectorAll('.mjr-btn').forEach(function(b){ b.classList.remove('sel'); });
+  document.querySelector('.mjr-btn').classList.add('sel');
+  go(0);
+}
+
+/* ── CHAT ── */
+var chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  var box = document.getElementById('chat-box');
+  var toggle = document.getElementById('chat-toggle');
+  if (chatOpen) { box.classList.add('show'); toggle.classList.add('open'); toggle.textContent = '✕'; }
+  else { box.classList.remove('show'); toggle.classList.remove('open'); toggle.textContent = '💬'; }
+}
+function addMessage(text, sender) {
+  var msgDiv = document.createElement('div');
+  msgDiv.className = 'chat-msg ' + sender;
+  var avatar = sender === 'bot' ? '🌲' : '👤';
+  msgDiv.innerHTML = '<div class="chat-avatar">' + avatar + '</div><div class="chat-bubble">' + text + '</div>';
+  var container = document.getElementById('chat-messages');
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+}
+function showTyping() {
+  document.getElementById('chat-typing').classList.add('show');
+  var c = document.getElementById('chat-messages');
+  c.scrollTop = c.scrollHeight;
+}
+function hideTyping() { document.getElementById('chat-typing').classList.remove('show'); }
+function askQuestion(q) { document.getElementById('chat-input').value = q; sendMessage(); }
+function sendMessage() {
+  var input = document.getElementById('chat-input');
+  var msg = input.value.trim();
+  if (!msg) return;
+  addMessage(msg, 'user');
+  input.value = '';
+  showTyping();
+  setTimeout(function() { hideTyping(); addMessage(getResponse(msg.toLowerCase()), 'bot'); }, 1200);
+}
+function getResponse(msg) {
+  if (msg.includes('salary') || msg.includes('pay') || msg.includes('nashville')) {
+    if (msg.includes('nashville') || msg.includes('l&d') || msg.includes('learning')) {
+      return '💰 For entry-level L&D specialists in Nashville (2025):<br><br>• <strong>Nashville Market Avg:</strong> $68,425<br>• <strong>National Entry-Level:</strong> $58,974<br>• <strong>BLS Median:</strong> $65,850<br><br>The $57,500 offer is <strong>$10,925 below Nashville average</strong> — that\'s your negotiation leverage!';
+    }
+    return '💵 Entry-level L&D salaries vary by location:<br><br>• <strong>National average:</strong> $58,974–$65,850<br>• <strong>Nashville:</strong> $68,425<br>• <strong>San Francisco:</strong> $75,000+<br><br>Always check Salary.com, Glassdoor, and local ZipRecruiter data for your city!';
+  }
+  if (msg.includes('negotiate') || msg.includes('counter') || msg.includes('ask for')) {
+    if (msg.includes('clawback') || msg.includes('signing bonus')) {
+      return '📝 <strong>Negotiating a clawback clause:</strong><br><br>1️⃣ "Can we reduce from 12 months to 6 months?"<br>2️⃣ "Can we pro-rate it? ($250/month vs. full $3,000)"<br>3️⃣ Frame it: "I\'m fully committed, but I want flexibility if unforeseen circumstances arise."<br><br>Most employers will negotiate this.';
+    }
+    return '💬 <strong>Negotiation Best Practices:</strong><br><br>✅ Stay collaborative: "I\'m excited about this role. I\'d like to discuss..."<br>✅ Cite data: "Based on Salary.com and BLS data for Nashville..."<br>✅ Be specific: "Would $62,000 be possible?"<br>✅ Address multiple terms<br>✅ Request 5–7 days to review<br><br>85% who negotiate get more. You got this!';
+  }
+  if (msg.includes('401') || msg.includes('retirement') || msg.includes('match')) {
+    return '🏦 <strong>401(k) Questions to Ask:</strong><br><br>1️⃣ "Does the employer match vest immediately?"<br>2️⃣ "What\'s the maximum match percentage?"<br>3️⃣ "Are there Roth 401(k) options?"<br><br>A 3% match on $57,500 = <strong>$1,725/year</strong> of free money. Always contribute enough to get the full match!';
+  }
+  if (msg.includes('health') || msg.includes('insurance') || msg.includes('medical')) {
+    return '🏥 <strong>Health Insurance Key Questions:</strong><br><br>1️⃣ "What\'s the annual deductible?"<br>2️⃣ "What\'s the out-of-pocket maximum?"<br>3️⃣ "Is there an HSA option?"<br>4️⃣ "Does the plan cover dependents?"<br><br>80% employer-paid premium means you pay ~$120–$180/month.';
+  }
+  if (msg.includes('red flag') || msg.includes('warning') || msg.includes('concern')) {
+    return '🚩 <strong>Top 4 Red Flags in This Offer:</strong><br><br>1️⃣ 12-month clawback on signing bonus<br>2️⃣ 12-month non-compete agreement<br>3️⃣ Vague "up to 8%" bonus with no written KPIs<br>4️⃣ 72-hour response deadline<br><br>None are deal-breakers, but ALL are negotiable. Address them before signing!';
+  }
+  if (msg.includes('deadline') || msg.includes('72 hour') || msg.includes('time')) {
+    return '⏰ <strong>Response Deadlines:</strong><br><br>• <strong>72 hours:</strong> Too short 🚩<br>• <strong>5–7 business days:</strong> Industry standard ✅<br><br>What to say: "I\'m very interested. To make a fully informed decision, I\'d like to request 5–7 business days. Is that possible?"<br><br>Most employers will extend.';
+  }
+  if (msg.includes('non-compete') || msg.includes('noncompete')) {
+    return '⚖️ <strong>Non-Compete Agreements:</strong><br><br>• Tennessee DOES enforce non-competes if "reasonable"<br>• 12 months is long — ask for 6 months<br>• Ask: "Who is considered a direct competitor?"<br>• Ask: "Does this prevent freelance L&D work?"<br><br>Have an employment attorney review before signing.';
+  }
+  if (msg.includes('nervous') || msg.includes('scared') || msg.includes('worried')) {
+    return '💪 <strong>You\'ve got this!</strong><br><br>✅ 73% of employers EXPECT negotiation<br>✅ 87% have NEVER rescinded an offer due to negotiation<br>✅ 85% who negotiate get more<br>✅ Average raise: 18.8%<br><br>Stay collaborative, cite data, and advocate for yourself!';
+  }
+  return '🤔 Here are some things I can help with:<br><br>💰 Salary benchmarks &amp; negotiation<br>🏥 Benefits evaluation (401k, health, PTO)<br>🚩 Red flags &amp; contract concerns<br>💬 How to phrase negotiation requests<br><br>Try: "What\'s a fair L&D salary in Nashville?" or "How do I negotiate a clawback?"';
+}
+</script>
+
+<!-- CHAT UI -->
+<button id="chat-toggle" onclick="toggleChat()" title="Ask a question">💬</button>
+<div id="chat-box">
+  <div id="chat-header">
+    <h3>🌲 The Grove Coach</h3>
+    <button id="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div id="chat-messages">
+    <div class="chat-msg bot">
+      <div class="chat-avatar">🌲</div>
+      <div class="chat-bubble">Hi! I'm your Grove Coach. Ask me anything about job offers, salary negotiation, benefits, or L&D careers!</div>
+    </div>
+    <div class="chat-suggestions">
+      <button class="chat-suggest-btn" onclick="askQuestion('What is a fair entry-level L&D salary in Nashville?')">💰 Nashville L&D salary?</button>
+      <button class="chat-suggest-btn" onclick="askQuestion('How do I negotiate a signing bonus clawback?')">📝 Negotiate clawback?</button>
+      <button class="chat-suggest-btn" onclick="askQuestion('What questions should I ask about 401k benefits?')">🏦 401k questions?</button>
+      <button class="chat-suggest-btn" onclick="askQuestion('Is a 72-hour deadline normal?')">⏰ Normal deadline?</button>
+    </div>
+  </div>
+  <div class="chat-typing" id="chat-typing">
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+  </div>
+  <div id="chat-input-wrap">
+    <input type="text" id="chat-input" placeholder="Ask a question..." onkeypress="if(event.key==='Enter')sendMessage()">
+    <button id="chat-send" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+</body>
+</html>

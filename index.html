@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Grove — Student Learning Lab | Redwood Communication</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:      #0B2B26;
+  --green-mid:  #1A4D45;
+  --green-light:#2A6B60;
+  --tan:        #FAF3DD;
+  --tan-mid:    #F0E6C0;
+  --gold:       #D4A843;
+  --gold-light: #E8C56A;
+  --white:      #FFFFFF;
+  --text-muted: #6B7A6E;
+  --text-light: #C8D5C2;
+  --card-bdr:   rgba(212,168,67,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--tan);color:var(--green);min-height:100vh;}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:60px;background:var(--green);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  box-shadow:0 2px 20px rgba(0,0,0,.3);
+}
+.nav-brand{display:flex;align-items:center;gap:14px;}
+.nav-logo{height:36px;object-fit:contain;}
+.nav-pipe{width:1px;height:32px;background:rgba(255,255,255,.2);}
+.nav-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.12em;}
+.nav-link{font-size:12px;font-weight:700;color:rgba(255,255,255,.75);text-decoration:none;letter-spacing:.06em;transition:color .18s;}
+.nav-link:hover{color:var(--gold);}
+
+/* ── HERO ── */
+.hero{
+  background:var(--green);
+  padding:120px 24px 80px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(11,43,38,0) 50%,var(--tan) 100%);
+  pointer-events:none;
+}
+.hero-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);margin-bottom:18px;}
+.hero-title{font-size:clamp(52px,9vw,96px);font-weight:900;line-height:.95;color:var(--tan);margin-bottom:12px;font-family:'EB Garamond',serif;font-style:italic;}
+.hero-sub{font-size:15px;font-weight:500;color:rgba(250,243,221,.7);max-width:520px;margin:0 auto 36px;line-height:1.8;letter-spacing:.02em;}
+.hero-tagline{
+  display:inline-block;background:var(--gold);color:var(--green);
+  font-size:12px;font-weight:800;padding:8px 22px;border-radius:4px;
+  text-transform:uppercase;letter-spacing:.1em;
+}
+
+/* ── STAT STRIP ── */
+.stat-strip{
+  background:var(--green-mid);
+  padding:28px 24px;
+  display:flex;justify-content:center;flex-wrap:wrap;gap:0;
+}
+.stat-item{
+  padding:0 36px;text-align:center;
+  border-right:1px solid rgba(255,255,255,.15);
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:26px;font-weight:900;color:var(--gold);line-height:1;}
+.stat-lbl{font-size:11px;color:rgba(250,243,221,.65);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;font-weight:600;}
+
+/* ── SECTION ── */
+.section{max-width:960px;margin:0 auto;padding:72px 24px;}
+.section-tag{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--gold);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-tag::before{content:'';display:block;width:28px;height:3px;background:var(--green-mid);border-radius:2px;}
+.section-h2{font-size:clamp(26px,4vw,38px);font-weight:900;line-height:1.15;margin-bottom:10px;color:var(--green);}
+.section-sub{font-size:15px;color:var(--text-muted);line-height:1.8;margin-bottom:40px;max-width:620px;}
+
+/* ── COURSE TABS ── */
+.course-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+.course-tab{
+  background:transparent;border:2px solid rgba(11,43,38,.2);
+  border-radius:6px;padding:10px 20px;cursor:pointer;
+  font-size:13px;font-weight:700;color:var(--text-muted);
+  font-family:'Montserrat',sans-serif;transition:all .18s;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.course-tab:hover{border-color:var(--green-mid);color:var(--green);}
+.course-tab.active{border-color:var(--green);background:var(--green);color:var(--tan);}
+.course-tab.soon{opacity:.45;cursor:default;}
+
+/* ── EXERCISE GRID ── */
+.exercise-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.ex-card{
+  background:var(--white);border:2px solid var(--card-bdr);
+  border-radius:12px;padding:28px;
+  display:flex;flex-direction:column;
+  transition:all .2s;
+  box-shadow:0 2px 12px rgba(11,43,38,.06);
+}
+.ex-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 28px rgba(11,43,38,.12);}
+.ex-icon{font-size:36px;margin-bottom:14px;}
+.ex-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:8px;}
+.ex-title{font-size:18px;font-weight:900;color:var(--green);margin-bottom:8px;line-height:1.25;}
+.ex-desc{font-size:13px;color:var(--text-muted);line-height:1.75;flex:1;margin-bottom:20px;}
+.ex-meta{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.ex-chip{
+  background:var(--tan-mid);border-radius:20px;
+  padding:4px 12px;font-size:11px;font-weight:700;color:var(--green-mid);
+}
+.ex-btn{
+  display:block;width:100%;text-align:center;
+  background:var(--green);color:var(--tan);
+  padding:12px 0;border-radius:6px;
+  font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  text-decoration:none;transition:all .2s;
+  box-shadow:0 4px 14px rgba(11,43,38,.2);
+}
+.ex-btn:hover{background:var(--green-mid);transform:translateY(-1px);box-shadow:0 6px 20px rgba(11,43,38,.28);}
+
+/* Coming soon card */
+.ex-card.soon{opacity:.55;pointer-events:none;}
+.ex-btn.soon-btn{background:var(--tan-mid);color:var(--text-muted);box-shadow:none;}
+
+/* ── ABOUT STRIP ── */
+.about-strip{
+  background:var(--green);
+  padding:72px 24px;
+  text-align:center;
+}
+.about-inner{max-width:680px;margin:0 auto;}
+.about-strip .section-tag{justify-content:center;}
+.about-strip .section-tag::before{display:none;}
+.about-h2{font-size:clamp(24px,3.5vw,34px);font-weight:900;color:var(--tan);margin-bottom:16px;line-height:1.2;}
+.about-p{font-size:15px;color:rgba(250,243,221,.72);line-height:1.9;margin-bottom:28px;}
+.about-btn{
+  display:inline-block;background:var(--gold);color:var(--green);
+  padding:13px 32px;border-radius:6px;
+  font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  text-decoration:none;transition:all .2s;
+}
+.about-btn:hover{background:var(--gold-light);transform:translateY(-2px);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--green);border-top:3px solid var(--gold);
+  padding:28px 24px;text-align:center;
+  font-size:12px;color:rgba(250,243,221,.5);
+}
+footer a{color:var(--gold);text-decoration:none;}
+footer a:hover{color:var(--gold-light);}
+
+/* ── COURSE PANES ── */
+.course-pane{display:none;}
+.course-pane.active{display:block;}
+
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-brand">
+    <img src="images/redwood-logo.png" alt="Redwood Communication" class="nav-logo">
+    <div class="nav-pipe"></div>
+    <div class="nav-label">The Grove</div>
+  </div>
+  <a href="https://redwoodcommunication.com" target="_blank" class="nav-link">redwoodcommunication.com →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Redwood Communication® · Student Learning Lab</div>
+  <h1 class="hero-title">The Grove</h1>
+  <p class="hero-sub">Interactive exercises, simulations, and tools to sharpen your communication skills — built for the classroom and beyond.</p>
+  <div class="hero-tagline">Supplemental Learning Resources</div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">Exercise live</div></div>
+  <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">Courses covered</div></div>
+  <div class="stat-item"><div class="stat-num">∞</div><div class="stat-lbl">Times you can practice</div></div>
+  <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Login required</div></div>
+</div>
+
+<!-- EXERCISES -->
+<div class="section">
+  <div class="section-tag">Exercises</div>
+  <h2 class="section-h2">Pick a course, start practicing.</h2>
+  <p class="section-sub">Each exercise is a standalone interactive tool. No account needed — just open and go. Shareable certificates included.</p>
+
+  <div class="course-tabs">
+    <button class="course-tab active" onclick="showCourse('com4340', this)">COM 4340 — Corporate Training &amp; Development</button>
+    <button class="course-tab soon" onclick="">COM 1100 — Fundamentals of Speech (Coming Soon)</button>
+    <button class="course-tab soon" onclick="">COM 3015 — Communication &amp; Community (Coming Soon)</button>
+  </div>
+
+  <!-- COM 4340 -->
+  <div class="course-pane active" id="pane-com4340">
+    <div class="exercise-grid">
+      <div class="ex-card">
+        <div class="ex-icon">💼</div>
+        <div class="ex-tag">Job Offer Negotiation</div>
+        <h3 class="ex-title">Offer IQ</h3>
+        <p class="ex-desc">Walk through a real job offer step-by-step. Decode compensation packages, spot red flags, benchmark your salary, and practice negotiating — all before you sign a thing.</p>
+        <div class="ex-meta">
+          <span class="ex-chip">~15 min</span>
+          <span class="ex-chip">8 Scenes</span>
+          <span class="ex-chip">Certificate</span>
+        </div>
+        <a href="offer-iq.html" class="ex-btn">Start Exercise →</a>
+      </div>
+
+      <div class="ex-card soon">
+        <div class="ex-icon">📋</div>
+        <div class="ex-tag">Instructional Design</div>
+        <h3 class="ex-title">ADDIE in Action</h3>
+        <p class="ex-desc">Walk through a complete training design cycle using the ADDIE model. Coming soon.</p>
+        <div class="ex-meta">
+          <span class="ex-chip">Coming Soon</span>
+        </div>
+        <a class="ex-btn soon-btn">Coming Soon</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COM 1100 (hidden) -->
+  <div class="course-pane" id="pane-com1100">
+    <div class="exercise-grid">
+      <div class="ex-card soon">
+        <div class="ex-icon">🎤</div>
+        <div class="ex-tag">Public Speaking</div>
+        <h3 class="ex-title">Speech Builder</h3>
+        <p class="ex-desc">Exercises for COM 1100 are on the way. Check back soon.</p>
+        <div class="ex-meta"><span class="ex-chip">Coming Soon</span></div>
+        <a class="ex-btn soon-btn">Coming Soon</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COM 3015 (hidden) -->
+  <div class="course-pane" id="pane-com3015">
+    <div class="exercise-grid">
+      <div class="ex-card soon">
+        <div class="ex-icon">🤝</div>
+        <div class="ex-tag">Community-Building</div>
+        <h3 class="ex-title">Community Simulator</h3>
+        <p class="ex-desc">Exercises for COM 3015 are on the way. Check back soon.</p>
+        <div class="ex-meta"><span class="ex-chip">Coming Soon</span></div>
+        <a class="ex-btn soon-btn">Coming Soon</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-inner">
+    <div class="section-tag">About</div>
+    <h2 class="about-h2">Built by Redwood Communication®</h2>
+    <p class="about-p">The Grove is a free supplemental learning resource developed to help students practice real-world communication skills. Every exercise is grounded in applied communication research and professional practice.</p>
+    <p class="about-p">Redwood Communication® works with organizations to develop leaders, build high-performing teams, and create cultures where people communicate with confidence and clarity.</p>
+    <a href="https://redwoodcommunication.com" target="_blank" class="about-btn">Learn More About Redwood Communication →</a>
+  </div>
+</div>
+
+<footer>
+  <strong style="color:var(--gold);">The Grove</strong> · A Redwood Communication® Learning Resource ·
+  <a href="https://redwoodcommunication.com" target="_blank">redwoodcommunication.com</a>
+</footer>
+
+<script>
+function showCourse(id, btn) {
+  if (btn.classList.contains('soon')) return;
+  document.querySelectorAll('.course-pane').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.course-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('pane-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
