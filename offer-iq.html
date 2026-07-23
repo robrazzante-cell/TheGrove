@@ -92,6 +92,25 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
 .stat-item:last-child{border-right:none;}
 .stat-num{font-size:28px;font-weight:900;color:var(--gold);line-height:1;}
 .stat-lbl{font-size:11px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;font-weight:600;}
+.cite{
+  font-size:9px;vertical-align:super;color:var(--gold-light);
+  cursor:pointer;margin-left:2px;font-weight:700;
+  border-bottom:1px dotted rgba(212,168,67,.5);
+}
+.cite:hover{color:var(--gold);}
+/* Citation tooltip */
+#cite-tip{
+  display:none;position:fixed;z-index:9000;
+  background:#fff;color:#0B2B26;
+  border:1px solid rgba(11,43,38,.15);
+  border-radius:8px;padding:12px 16px;
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+  max-width:280px;font-size:12px;line-height:1.5;
+  font-family:'Montserrat',sans-serif;pointer-events:none;
+}
+#cite-tip.show{display:block;}
+#cite-tip a{color:var(--green-mid);font-weight:700;text-decoration:underline;pointer-events:all;}
+#cite-tip .ct-src{font-size:10px;color:#666;margin-top:4px;}
 
 .intro-body{background:var(--green-deep);padding:48px 24px 60px;max-width:780px;margin:0 auto;width:100%;}
 .intro-body h3{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:16px;font-weight:700;}
@@ -397,11 +416,11 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
   </div>
 
   <div class="stat-strip">
-    <div class="stat-item"><div class="stat-num">73%</div><div class="stat-lbl">Employers expect negotiation</div></div>
-    <div class="stat-item"><div class="stat-num">85%</div><div class="stat-lbl">Who negotiate get more</div></div>
-    <div class="stat-item"><div class="stat-num">$65,850</div><div class="stat-lbl">BLS median L&amp;D salary</div></div>
-    <div class="stat-item"><div class="stat-num">11%</div><div class="stat-lbl">Job growth through 2034</div></div>
-    <div class="stat-item"><div class="stat-num">18.8%</div><div class="stat-lbl">Avg raise from negotiating</div></div>
+    <div class="stat-item"><div class="stat-num">73%</div><div class="stat-lbl">Employers expect negotiation<span class="cite" data-cite="1">¹</span></div></div>
+    <div class="stat-item"><div class="stat-num">85%</div><div class="stat-lbl">Who negotiate get more<span class="cite" data-cite="2">²</span></div></div>
+    <div class="stat-item"><div class="stat-num">$65,850</div><div class="stat-lbl">BLS median L&amp;D salary<span class="cite" data-cite="3">³</span></div></div>
+    <div class="stat-item"><div class="stat-num">11%</div><div class="stat-lbl">Job growth through 2034<span class="cite" data-cite="4">⁴</span></div></div>
+    <div class="stat-item"><div class="stat-num">18.8%</div><div class="stat-lbl">Avg raise from negotiating<span class="cite" data-cite="5">⁵</span></div></div>
   </div>
 
   <div class="intro-body">
@@ -489,6 +508,9 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
   </div>
   <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
 </div>
+
+<!-- CITATION TOOLTIP -->
+<div id="cite-tip"></div>
 
 <!-- TOOLTIP OVERLAY -->
 <div id="tip-box">
@@ -1197,5 +1219,48 @@ function getResponse(msg) {
   </div>
 </div>
 
+<script>
+// ── CITATION TOOLTIPS ─────────────────────────────────────────
+const CITATIONS = {
+  '1': { label: '73% of employers expect candidates to negotiate salary', source: 'Salary.com · 2024 Compensation Best Practices Report', url: 'https://www.salary.com/compensation-best-practices-report/' },
+  '2': { label: '85% of people who negotiate receive higher compensation', source: 'Salary.com · Negotiation Survey', url: 'https://www.salary.com/articles/salary-negotiation-guide/' },
+  '3': { label: 'Training & Development Specialists — Median annual wage: $65,850', source: 'U.S. Bureau of Labor Statistics · Occupational Outlook Handbook', url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm' },
+  '4': { label: '11% employment growth projected 2023–2033, faster than average', source: 'U.S. Bureau of Labor Statistics · Occupational Outlook Handbook', url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm' },
+  '5': { label: 'Negotiating salary yields an average raise of 18.8%', source: 'Robert Half · Salary Guide', url: 'https://www.roberthalf.com/us/en/insights/salary-guide' },
+};
+
+const tip = document.getElementById('cite-tip');
+let hideTimer;
+
+document.querySelectorAll('.cite').forEach(function(el) {
+  el.addEventListener('mouseenter', function(e) {
+    clearTimeout(hideTimer);
+    const c = CITATIONS[el.dataset.cite];
+    if (!c) return;
+    tip.innerHTML = '<strong style="display:block;margin-bottom:4px;">' + c.label + '</strong>'
+      + '<div class="ct-src">' + c.source + '</div>'
+      + '<a href="' + c.url + '" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:11px;">View source →</a>';
+    tip.classList.add('show');
+    positionTip(e);
+  });
+  el.addEventListener('mousemove', positionTip);
+  el.addEventListener('mouseleave', function() {
+    hideTimer = setTimeout(function() { tip.classList.remove('show'); }, 200);
+  });
+});
+
+tip.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+tip.addEventListener('mouseleave', function() { tip.classList.remove('show'); });
+
+function positionTip(e) {
+  const pad = 12, tw = 280;
+  let x = e.clientX + pad;
+  let y = e.clientY + pad;
+  if (x + tw > window.innerWidth - 8) x = e.clientX - tw - pad;
+  if (y + 120 > window.innerHeight - 8) y = e.clientY - 120 - pad;
+  tip.style.left = x + 'px';
+  tip.style.top  = y + 'px';
+}
+</script>
 </body>
 </html>
