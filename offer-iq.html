@@ -211,12 +211,23 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
 /* ── BENCHMARKS ── */
 .bench-card{background:var(--green-card);border:1px solid var(--card-bdr);border-radius:12px;padding:26px;margin-bottom:20px;}
 .bc-h{font-size:17px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.bc-row{display:grid;grid-template-columns:1.3fr 2fr .8fr;gap:14px;align-items:center;margin-bottom:12px;}
+.bc-row{display:grid;grid-template-columns:1.3fr 2fr .9fr;gap:14px;align-items:center;margin-bottom:12px;}
 .bc-lbl{font-size:13px;color:var(--text-muted);font-weight:700;}
 .bc-bar{height:20px;background:rgba(255,255,255,.05);border-radius:10px;overflow:hidden;position:relative;}
 .bc-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:10px;width:0%;transition:width 1.2s ease;}
 .bc-fill.red{background:linear-gradient(90deg,var(--danger),#e63940);}
+.bc-val-wrap{text-align:right;}
 .bc-val{font-size:15px;font-weight:900;color:#fff;}
+.bc-conf{font-size:9px;font-weight:700;letter-spacing:.02em;margin-top:2px;}
+.bc-conf.hi{color:var(--success);}
+.bc-conf.md{color:var(--warn);}
+.bc-conf.lo{color:var(--danger);}
+/* Confidence legend */
+.conf-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text-muted);margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.06);}
+.conf-legend span{font-weight:700;}
+.conf-legend .hi{color:var(--success);}
+.conf-legend .md{color:var(--warn);}
+.conf-legend .lo{color:var(--danger);}
 
 /* ── VERDICT ── */
 .verdict{
@@ -418,8 +429,8 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
   <div class="stat-strip">
     <div class="stat-item"><div class="stat-num">73%</div><div class="stat-lbl">Employers expect negotiation<span class="cite" data-cite="1">¹</span></div></div>
     <div class="stat-item"><div class="stat-num">85%</div><div class="stat-lbl">Who negotiate get more<span class="cite" data-cite="2">²</span></div></div>
-    <div class="stat-item"><div class="stat-num">$65,850</div><div class="stat-lbl">BLS median L&amp;D salary<span class="cite" data-cite="3">³</span></div></div>
-    <div class="stat-item"><div class="stat-num">11%</div><div class="stat-lbl">Job growth through 2034<span class="cite" data-cite="4">⁴</span></div></div>
+    <div class="stat-item"><div class="stat-num">$63,080</div><div class="stat-lbl">BLS median L&amp;D salary<span class="cite" data-cite="3">³</span></div></div>
+    <div class="stat-item"><div class="stat-num">8%</div><div class="stat-lbl">Job growth, 2023–2033<span class="cite" data-cite="4">⁴</span></div></div>
     <div class="stat-item"><div class="stat-num">18.8%</div><div class="stat-lbl">Avg raise from negotiating<span class="cite" data-cite="5">⁵</span></div></div>
   </div>
 
@@ -536,36 +547,43 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
       </div>
     </div>
 
+    <div class="conf-legend">
+      <span>Data confidence:</span>
+      <span class="hi">● High — direct government source</span>
+      <span class="md">● Medium — third-party salary survey</span>
+      <span class="lo">● Low — estimate, verify before citing</span>
+    </div>
+
     <div class="bench-card">
       <div class="bc-h">💰 Salary Comparison — Learning &amp; Development Specialist</div>
       <div class="bc-row">
-        <div class="bc-lbl">📊 BLS National Median (2025)</div>
+        <div class="bc-lbl">📊 BLS National Median (May 2023)</div>
         <div class="bc-bar"><div class="bc-fill" id="bar1" style="width:0%"></div></div>
-        <div class="bc-val">$65,850</div>
+        <div class="bc-val-wrap"><div class="bc-val">$63,080</div><div class="bc-conf hi">● High · BLS.gov (SOC 13-1151)</div></div>
       </div>
       <div class="bc-row">
         <div class="bc-lbl">📈 Nashville Market Avg (L&amp;D)</div>
         <div class="bc-bar"><div class="bc-fill" id="bar2" style="width:0%"></div></div>
-        <div class="bc-val">$68,425</div>
+        <div class="bc-val-wrap"><div class="bc-val">$68,425</div><div class="bc-conf md">● Medium · Salary.com estimate</div></div>
       </div>
       <div class="bc-row">
         <div class="bc-lbl">🎓 Entry-Level National Avg</div>
         <div class="bc-bar"><div class="bc-fill" id="bar3" style="width:0%"></div></div>
-        <div class="bc-val">$58,974</div>
+        <div class="bc-val-wrap"><div class="bc-val">$58,974</div><div class="bc-conf lo">● Low · Estimated, not published</div></div>
       </div>
       <div class="bc-row">
         <div class="bc-lbl" id="bar4lab">🟦 Related Major Avg</div>
         <div class="bc-bar"><div class="bc-fill" id="bar4" style="width:0%"></div></div>
-        <div class="bc-val" id="bar4val">$58,974</div>
+        <div class="bc-val-wrap"><div class="bc-val" id="bar4val">$58,974</div><div class="bc-conf lo">● Low · Estimated, verify on NACE</div></div>
       </div>
       <div class="bc-row">
         <div class="bc-lbl">📄 This Offer (Base)</div>
         <div class="bc-bar"><div class="bc-fill red" id="bar5" style="width:0%"></div></div>
-        <div class="bc-val">$57,500</div>
+        <div class="bc-val-wrap"><div class="bc-val">$57,500</div><div class="bc-conf hi">● Scenario figure</div></div>
       </div>
     </div>
 
-    <div class="wbox">⚠️ <strong>Below Market:</strong> At $57,500, your base is <strong>$1,474 below the entry-level national average</strong> and <strong>$10,925 below Nashville's L&amp;D market rate</strong>. This is your primary negotiation leverage — cite these exact numbers in your counter-offer.</div>
+    <div class="wbox">⚠️ <strong>Below Market:</strong> At $57,500, your base is <strong>$5,580 below the BLS national median of $63,080</strong> <span style="font-size:11px;color:var(--success);">(● High confidence · BLS.gov)</span> and an estimated <strong>$10,925 below Nashville's market rate of $68,425</strong> <span style="font-size:11px;color:var(--warn);">(● Medium confidence · Salary.com)</span>. Lead with the BLS figure in your counter-offer — it's your strongest citation.</div>
     <div class="gbox">✅ <strong>Good News:</strong> The $1,500 L&amp;D budget, 401(k) match, and fully remote setup add real value. Your <em>total compensation</em> may be competitive once benefits are included — but <strong>base salary is still the most important number</strong>, because all future raises and bonuses are calculated from it.</div>
 
     <div class="btn-row">
@@ -776,7 +794,7 @@ function initS1() {
 
 var TIPS = {
   base:      { tag:'Core Financial', hed:'Base Salary', bod:'Your guaranteed annual income before taxes, bonuses, or extras. It\'s the foundation of your total compensation — all future raises, bonus percentages, and 401k contributions are calculated from this number. It\'s the most important figure to negotiate.', s:{ v:'$57,500/yr', l:'Paid bi-weekly — your budgeting baseline' } },
-  salary:    { tag:'🚩 Below Market', hed:'$57,500 — Below Entry-Level Average', bod:'This base is $1,474 below the national entry-level average for L&D specialists ($58,974) and $10,925 below Nashville\'s market rate ($68,425). These exact numbers are your leverage when you counter-offer. Cite them directly.', s:{ v:'-$10,925', l:'Below Nashville L&D market average' } },
+  salary:    { tag:'🚩 Below Market', hed:'$57,500 — Below Market Rate', bod:'This offer is $5,580 below the BLS national median of $63,080 (high confidence · BLS.gov, SOC 13-1151) and an estimated $10,925 below Nashville\'s market rate of $68,425 (medium confidence · Salary.com). Always lead with the BLS figure — it\'s a federal source and the strongest citation in a negotiation.', s:{ v:'-$5,580', l:'Below BLS national median (high confidence)' } },
   bonus:     { tag:'Variable Pay', hed:'Annual Performance Bonus', bod:'An extra payment tied to hitting specific performance targets. These are NOT guaranteed — ask for the exact criteria in writing. Common metrics in L&D: training completion rates, learner satisfaction scores, time-to-competency improvements.', s:{ v:'Up to 8%', l:'= Up to $4,600/yr at full payout' } },
   bonuspct:  { tag:'Bonus Details', hed:'8% Performance Bonus Target', bod:'Up to $4,600/year. Industry average for L&D entry-level bonuses is 5–12%, so 8% is solid. However, "up to 8%" can mean $0 if targets aren\'t clearly defined. Always ask: "What percentage of employees received the full bonus last year?"', s:{ v:'$4,600 max', l:'If 100% of targets are met' } },
   signing:   { tag:'One-Time Payment', hed:'Signing Bonus', bod:'A one-time payment when you start — designed to attract candidates or offset competing offers. Always check for clawback/repayment clauses before celebrating. A $3,000 signing bonus is modest and also a negotiation point.', s:{ v:'$3,000', l:'Year 1 only — read the fine print!' } },
@@ -817,7 +835,7 @@ function closeTip() { document.getElementById('tip-box').classList.remove('show'
 function initS3() {
   S.score += 5; updHUD();
   setTimeout(function() {
-    document.getElementById('bar1').style.width = '94%';
+    document.getElementById('bar1').style.width = '92%'; // $63,080 / $68,425
     document.getElementById('bar2').style.width = '100%';
     document.getElementById('bar3').style.width = '86%';
     var pct4 = Math.round(S.majorAvg / 68425 * 100);
@@ -1049,7 +1067,7 @@ function finishNeg() {
     vb.innerHTML = '<div class="v-ico">👍</div><div><div class="v-ttl">Solid Effort!</div><div class="v-bod">Good progress, but you left some value behind. Next time: always cite specific salary benchmarks and address multiple terms in sequence. Score: +' + negPts + ' pts</div></div>';
   } else {
     vb.className = 'verdict v-bad';
-    vb.innerHTML = '<div class="v-ico">📚</div><div><div class="v-ttl">Learning Opportunity</div><div class="v-bod">Core lesson: stay collaborative, cite real data (BLS $65,850; Nashville $68,425), and make specific asks. Score: +' + negPts + ' pts</div></div>';
+    vb.innerHTML = '<div class="v-ico">📚</div><div><div class="v-ttl">Learning Opportunity</div><div class="v-bod">Core lesson: stay collaborative, cite real data (BLS $63,080 — high confidence; Nashville ~$68,425 — medium confidence), and make specific asks. Score: +' + negPts + ' pts</div></div>';
   }
   document.getElementById('neg-rounds').appendChild(vb);
   document.getElementById('s7next').style.display = 'inline-block';
@@ -1064,7 +1082,7 @@ function initS8() {
     fin >= 45 ? '📈 Offer IQ: Developing — Review the key takeaways below' :
                 '📚 Offer IQ: Beginner — Try again with fresh eyes!';
   var items = [
-    'Research L&D salaries on BLS.gov, Salary.com, Glassdoor, and ZipRecruiter (Nashville avg: $68,425)',
+    'Research L&D salaries on BLS.gov (national median: $63,080 · high confidence), Salary.com, Glassdoor, and ZipRecruiter (Nashville est.: ~$68,425 · medium confidence)',
     'Calculate TOTAL compensation — base + bonus + 401k match + health insurance + L&D budget + remote savings',
     'Identify all red flags before responding (clawbacks, non-competes, vague bonus language, short deadlines)',
     'Always request 5–7 business days to review any formal offer',
@@ -1237,11 +1255,11 @@ function getResponse(msg) {
 <script>
 // ── CITATION TOOLTIPS ─────────────────────────────────────────
 const CITATIONS = {
-  '1': { label: '73% of employers expect candidates to negotiate salary', source: 'Salary.com · 2024 Compensation Best Practices Report', url: 'https://www.salary.com/compensation-best-practices-report/' },
-  '2': { label: '85% of people who negotiate receive higher compensation', source: 'Salary.com · Negotiation Survey', url: 'https://www.salary.com/articles/salary-negotiation-guide/' },
-  '3': { label: 'Training & Development Specialists — Median annual wage: $65,850', source: 'U.S. Bureau of Labor Statistics · Occupational Outlook Handbook', url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm' },
-  '4': { label: '11% employment growth projected 2023–2033, faster than average', source: 'U.S. Bureau of Labor Statistics · Occupational Outlook Handbook', url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm' },
-  '5': { label: 'Negotiating salary yields an average raise of 18.8%', source: 'Robert Half · Salary Guide', url: 'https://www.roberthalf.com/us/en/insights/salary-guide' },
+  '1': { label: '● MEDIUM CONFIDENCE — 73% of employers expect candidates to negotiate salary (survey-based; figures vary by year and source)', source: 'Salary.com · 2024 Compensation Best Practices Report', url: 'https://www.salary.com/compensation-best-practices-report/' },
+  '2': { label: '● MEDIUM CONFIDENCE — 85% of people who negotiate receive higher compensation (survey-based; verify current year)', source: 'Salary.com · Negotiation Survey', url: 'https://www.salary.com/articles/salary-negotiation-guide/' },
+  '3': { label: '● HIGH CONFIDENCE — Training & Development Specialists median annual wage: $63,080 (May 2023 OES, SOC 13-1151)', source: 'U.S. Bureau of Labor Statistics · May 2023 Occupational Employment Survey', url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm' },
+  '4': { label: '● HIGH CONFIDENCE — 8% employment growth projected 2023–2033, faster than average', source: 'U.S. Bureau of Labor Statistics · Occupational Outlook Handbook', url: 'https://www.bls.gov/ooh/business-and-financial/training-and-development-specialists.htm' },
+  '5': { label: '● LOW CONFIDENCE — Average raise of 18.8% from negotiating (source unclear; verify before citing)', source: 'Various salary surveys — confirm on Salary.com or Robert Half', url: 'https://www.roberthalf.com/us/en/insights/salary-guide' },
 };
 
 const tip = document.getElementById('cite-tip');
