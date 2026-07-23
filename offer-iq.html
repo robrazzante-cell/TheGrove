@@ -482,7 +482,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
         <div class="ol-sub">Nashville, Tennessee · Official Offer of Employment</div>
       </div>
       <p class="ol-p"><strong>Dear Jordan Reeves,</strong></p>
-      <p class="ol-p">We are pleased to extend you an offer for the position of <strong>Entry-Level Learning &amp; Development Specialist</strong>, reporting to the Director of Talent Development, effective June 9, 2025.</p>
+      <p class="ol-p">We are pleased to extend you an offer for the position of <strong>Entry-Level Learning &amp; Development Specialist</strong>, reporting to the Director of Talent Development, effective <span id="offer-date-1"></span>.</p>
       <p class="ol-p"><strong>Compensation &amp; Bonus:</strong><br>
       Your <span class="term" onclick="showTip('base')">base salary</span> will be <span class="term flag" onclick="showTip('salary')">$57,500 per year</span>, paid bi-weekly. You are eligible for an <span class="term" onclick="showTip('bonus')">annual performance bonus</span> of <span class="term" onclick="showTip('bonuspct')">up to 8% of base salary</span>, evaluated each December. A <span class="term" onclick="showTip('signing')">signing bonus</span> of <span class="term flag" onclick="showTip('clawback')">$3,000 (12-month full repayment clause)</span> will be issued with your first paycheck.</p>
       <p class="ol-p"><strong>Benefits:</strong><br>
@@ -492,7 +492,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
       <p class="ol-p"><strong>Additional Terms:</strong><br>
       This offer includes a <span class="term flag" onclick="showTip('noncompete')">12-month non-compete agreement</span> with direct corporate L&amp;D competitors, as well as an <span class="term" onclick="showTip('ip')">intellectual property assignment clause</span>. An <span class="term good" onclick="showTip('eap')">Employee Assistance Program (EAP)</span> is provided at no cost.</p>
       <p class="ol-p"><strong>Start Date &amp; Response:</strong><br>
-      Proposed start: <span class="term" onclick="showTip('start')">June 9, 2025</span>. Please respond by <span class="term flag" onclick="showTip('deadline')">May 8, 2025 — 72-hour deadline</span>.</p>
+      Proposed start: <span class="term" onclick="showTip('start')" id="offer-date-2"></span>. Please respond by <span class="term flag" onclick="showTip('deadline')" id="offer-deadline"></span>.</p>
       <p class="ol-p" style="margin-top:28px;">We look forward to you joining BrightPath!<br><br>
       <strong>Sarah Martinez</strong><br><em>HR Director, BrightPath Corporate Learning</em></p>
     </div>
@@ -792,7 +792,7 @@ var TIPS = {
   noncompete:{ tag:'🚩 Legal Restriction', hed:'12-Month Non-Compete Agreement', bod:'This clause prevents you from working for a "direct corporate L&D competitor" for 12 months after leaving. Tennessee DOES enforce non-competes if they\'re reasonable. Ask: "Who is considered a competitor? Does this include freelance L&D work?" Negotiate to 6 months or narrow the scope.', s:{ v:'12 months', l:'Could limit your next job options' } },
   ip:        { tag:'Legal Clause', hed:'Intellectual Property Assignment', bod:'Any training materials, courses, or content you create while employed belong to BrightPath, not you. This is standard but worth clarifying: "Does this include content I create on personal time using personal tools?"', s:{ v:'Standard', l:'Your work product = company property' } },
   eap:       { tag:'Wellness Benefit', hed:'Employee Assistance Program (EAP)', bod:'Free confidential counseling, mental health support, financial planning, and legal advice (typically 3–8 sessions/year per issue). EAPs are underutilized but valuable. Ask: "How many sessions are covered? Is family counseling included?"', s:{ v:'Free', l:'3–8 sessions/year per issue' } },
-  start:     { tag:'Start Date', hed:'June 9, 2025', bod:'Your proposed first day. If you need more time (to finish school, relocate, or give notice), this is negotiable. Standard notice is 2 weeks; some roles require 30 days. Ask: "Is there flexibility on the start date if needed?"', s:{ v:'June 9, 2025', l:'Negotiable if you need more time' } },
+  start:     { tag:'Start Date', hed:'Your Proposed Start Date', bod:'Your proposed first day. If you need more time (to finish school, relocate, or give notice), this is negotiable. Standard notice is 2 weeks; some roles require 30 days. Ask: "Is there flexibility on the start date if needed?"', s:{ v:'See offer letter', l:'Negotiable if you need more time' } },
   deadline:  { tag:'🚩 Response Deadline', hed:'72-Hour Deadline (May 8)', bod:'BrightPath wants your decision in 3 days. Industry standard is 5–7 business days, and you can ask for more. Fast deadlines pressure you into accepting without fully evaluating. Say: "I\'d like 7 business days to review this offer with my advisors. Is that possible?"', s:{ v:'3 days', l:'Too short — ask for 5–7 business days' } }
 };
 
@@ -1219,6 +1219,21 @@ function getResponse(msg) {
   </div>
 </div>
 
+<script>
+// ── DYNAMIC OFFER DATES ───────────────────────────────────────
+(function() {
+  const now = new Date();
+  const fmt = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const startDate = fmt.format(now);
+  // Deadline = 3 days from now
+  const dl = new Date(now); dl.setDate(dl.getDate() + 3);
+  const dlFmt = fmt.format(dl);
+  const ids = ['offer-date-1', 'offer-date-2'];
+  ids.forEach(function(id) { var el = document.getElementById(id); if (el) el.textContent = startDate; });
+  var dlEl = document.getElementById('offer-deadline');
+  if (dlEl) dlEl.textContent = dlFmt + ' — 72-hour deadline';
+})();
+</script>
 <script>
 // ── CITATION TOOLTIPS ─────────────────────────────────────────
 const CITATIONS = {
