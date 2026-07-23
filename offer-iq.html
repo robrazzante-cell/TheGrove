@@ -485,7 +485,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
   <div class="wrap">
     <div class="scene-tag">Scene 2 · Decode the Offer</div>
     <h1 class="scene-h1">Your Job Offer — Click Each Underlined Term</h1>
-    <p class="scene-sub">Read through the offer letter below. Tap any underlined term to see what it means, how to evaluate it, and what questions to ask. Once you've explored at least 6 terms, you can move forward.</p>
+    <p class="scene-sub">Read through the offer letter below. Tap any underlined term to see what it means, how to evaluate it, and what questions to ask.</p>
 
     <div class="offer-letter">
       <div class="ol-hd">
@@ -509,12 +509,12 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
     </div>
 
     <div class="ibox" id="s2-status">
-      📖 <strong>Explored:</strong> <span id="term-ct" style="color:var(--gold-light);font-weight:900;">0</span> / 14 terms. Click at least 6 underlined terms to unlock the next scene.
+      📖 <strong>Explored:</strong> <span id="term-ct" style="color:var(--gold-light);font-weight:900;">0</span> / 14 terms
     </div>
 
     <div class="btn-row">
       <button class="btn-s" onclick="go(1)">← Back</button>
-      <button class="btn-p" id="s2next" onclick="go(3)" disabled>Benchmark the Salary →</button>
+      <button class="btn-p" id="s2next" onclick="go(3)">Benchmark the Salary →</button>
     </div>
   </div>
   <div class="sim-foot"><strong>The Grove</strong> · <a href="https://redwoodcommunication.com" target="_blank">Redwood Communication®</a></div>
@@ -819,10 +819,7 @@ function showTip(key) {
   if (!t) return;
   expSet.add(key);
   document.getElementById('term-ct').textContent = expSet.size;
-  if (expSet.size >= 6) {
-    document.getElementById('s2next').disabled = false;
-    S.score += 10; updHUD();
-  }
+  if (expSet.size === 1) { S.score += 10; updHUD(); }
   document.getElementById('tp-tag').textContent = t.tag;
   document.getElementById('tp-hed').textContent = t.hed;
   document.getElementById('tp-bod').textContent = t.bod;
