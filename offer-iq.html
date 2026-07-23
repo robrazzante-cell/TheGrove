@@ -374,39 +374,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
 .cl-txt{font-size:14px;line-height:1.7;color:var(--text-light);font-weight:500;}
 .cl-txt.done{color:var(--text-muted);text-decoration:line-through;}
 
-/* ── CERTIFICATE ── */
-.cert{
-  background:var(--tan);color:var(--green);
-  border-radius:12px;padding:48px 40px;margin-top:32px;text-align:center;
-  position:relative;border:6px solid var(--green);
-  box-shadow:0 0 0 2px var(--gold);
-}
-.cert-header{
-  background:var(--green);margin:-48px -40px 32px;
-  padding:28px 40px;border-radius:6px 6px 0 0;
-  display:flex;align-items:center;justify-content:center;gap:20px;
-}
-.cert-logo{height:42px;object-fit:contain;}
-.cert-header-text .grove{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:rgba(250,243,221,.6);font-weight:700;margin-bottom:2px;}
-.cert-header-text .brand{font-size:16px;font-weight:800;color:var(--gold);}
-.cert-pipe{width:1px;height:42px;background:rgba(255,255,255,.2);}
-.cert-ttl{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin-bottom:6px;font-weight:700;}
-.cert-h1{font-size:38px;font-weight:900;margin-bottom:18px;color:var(--green);font-family:'EB Garamond',serif;}
-.cert-h1 span{color:var(--gold);}
-.cert-bod{font-size:14px;color:#5a6a5a;line-height:1.8;margin-bottom:26px;}
-.cert-stu{font-size:24px;font-weight:700;color:var(--green);font-family:'EB Garamond',serif;font-style:italic;margin-bottom:8px;}
-.cert-scenario{font-size:13px;color:#5a6a5a;margin-bottom:28px;}
-.cert-gold-bar{height:3px;background:var(--gold);margin:0 auto 24px;width:80px;border-radius:2px;}
-.cert-foot{display:flex;justify-content:space-around;padding-top:22px;border-top:2px solid var(--tan-mid);font-size:11px;color:#7a8a7a;}
-.cf-col .cf-sig{font-size:18px;font-weight:700;font-family:'EB Garamond',serif;color:var(--green);margin-bottom:4px;}
-.cert-linkedin{
-  display:inline-block;margin-top:20px;
-  background:var(--green);color:var(--tan);
-  padding:10px 24px;border-radius:6px;
-  font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
-  text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:'Montserrat',sans-serif;
-}
-.cert-linkedin:hover{background:var(--green-mid);}
 
 /* ── FOOTER ── */
 .sim-foot{background:var(--green);padding:18px 24px;text-align:center;font-size:12px;color:rgba(255,255,255,.45);margin-top:auto;border-top:2px solid var(--gold);}
@@ -460,7 +427,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
   <div style="display:flex;align-items:center;gap:20px;">
     <a href="index.html" class="nav-back">← Back to The Grove</a>
     <div class="nav-pills">
-      <div class="nav-pill">Scene <b id="hud-scene">—</b> / 8</div>
+      <div class="nav-pill">Scene <b id="hud-scene">—</b> / 7</div>
       <div class="nav-pill">Score: <b id="hud-score">0</b> / 100</div>
     </div>
   </div>
@@ -504,7 +471,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
       <button class="mjr-btn" onclick="pickMajor(this,'General / Other',58000)">🎓 General / Other</button>
     </div>
     <button class="btn-start" id="startBtn">Start Simulation →</button>
-    <p class="start-note">8 interactive scenes · ~15 minutes · Based on BLS, Salary.com &amp; NACE 2025 data</p>
+    <p class="start-note">7 interactive scenes · ~15 minutes · Based on BLS, Salary.com &amp; NACE 2025 data</p>
   </div>
 
   <div class="sim-foot">
@@ -866,39 +833,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
       <div id="final-cl"></div>
     </div>
 
-    <!-- CERTIFICATE -->
-    <div class="cert" id="cert-section">
-      <div class="cert-header">
-        <img src="images/redwood-logo.png" alt="Redwood Communication" class="cert-logo">
-        <div class="cert-pipe"></div>
-        <div class="cert-header-text">
-          <div class="grove">The Grove</div>
-          <div class="brand">Redwood Communication®</div>
-        </div>
-      </div>
-      <div class="cert-ttl">Certificate of Completion</div>
-      <h2 class="cert-h1">Offer <span>IQ</span></h2>
-      <div class="cert-gold-bar"></div>
-      <div class="cert-bod">This certifies that</div>
-      <div class="cert-stu" id="cert-name">Student</div>
-      <div class="cert-scenario">has successfully completed the<br><strong>Job Offer Negotiation Simulator</strong><br>and demonstrated applied negotiation skills.</div>
-      <div class="cert-foot">
-        <div class="cf-col">
-          <div class="cf-sig">Rob Razzante, PhD</div>
-          <div>Redwood Communication®</div>
-        </div>
-        <div class="cf-col">
-          <div class="cf-sig" id="cert-date">—</div>
-          <div>The Grove · thegrove.redwoodcommunication.com</div>
-        </div>
-      </div>
-      <button class="cert-linkedin" onclick="shareCert()">Share on LinkedIn →</button>
-    </div>
-
-    <div style="margin-top:12px;text-align:center;font-size:12px;color:var(--text-muted);">
-      Tip: Right-click the certificate above and "Save image" or use your browser's Print to PDF to save it.
-    </div>
-
     <div class="btn-row" style="justify-content:center;margin-top:32px;">
       <button class="btn-start" style="max-width:280px;" onclick="restart()">🔄 Restart Simulation</button>
     </div>
@@ -930,7 +864,7 @@ function go(n) {
   var el = document.getElementById('s' + n);
   if (el) el.classList.add('active');
   window.scrollTo(0, 0);
-  var pct = (n === 0) ? 0 : Math.round(n / 8 * 100);
+  var pct = (n === 0) ? 0 : Math.min(100, Math.round(n / 7 * 100));
   document.getElementById('pbar').style.width = pct + '%';
   document.getElementById('hud-scene').textContent = (n === 0) ? '—' : n;
   updHUD();
@@ -1255,16 +1189,6 @@ function initS8() {
   items.forEach(function(item, i) {
     fcl.innerHTML += '<div class="cl-row"><div class="cl-box" id="fc' + i + '" onclick="toggleFC(' + i + ')"></div><div class="cl-txt" id="ft' + i + '">' + item + '</div></div>';
   });
-
-  var now = new Date();
-  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cert-date').textContent = months[now.getMonth()] + ' ' + now.getFullYear();
-
-  var nameInput = document.getElementById('cert-name-input');
-  if (!nameInput) {
-    var nameEl = document.getElementById('cert-name');
-    nameEl.innerHTML = '<input id="cert-name-input" type="text" placeholder="Enter your name" style="font-family:\'EB Garamond\',serif;font-style:italic;font-size:22px;font-weight:700;color:var(--green);border:none;border-bottom:2px solid var(--gold);background:transparent;text-align:center;width:300px;outline:none;padding:4px 8px;">';
-  }
 }
 function toggleFC(i) {
   var b = document.getElementById('fc' + i), t = document.getElementById('ft' + i);
@@ -1279,12 +1203,6 @@ function animRing(target) {
     ring.style.background = 'conic-gradient(var(--gold) ' + Math.round(n / 100 * 360) + 'deg, var(--green-card) 0deg)';
     if (n >= target) clearInterval(iv);
   }, 18);
-}
-function shareCert() {
-  var nameEl = document.getElementById('cert-name-input');
-  var name = nameEl ? nameEl.value || 'a student' : 'a student';
-  var text = encodeURIComponent('I just completed "Offer IQ" — a job offer negotiation simulator by Redwood Communication® — and earned a score of ' + Math.min(100, S.score) + '/100! Check out The Grove for free learning tools: https://thegrove.redwoodcommunication.com');
-  window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://thegrove.redwoodcommunication.com') + '&summary=' + text, '_blank');
 }
 function restart() {
   S = { major:'Corporate Communication', majorAvg:58974, score:0 };
@@ -1333,9 +1251,9 @@ function sendMessage() {
 function getResponse(msg) {
   if (msg.includes('salary') || msg.includes('pay') || msg.includes('nashville')) {
     if (msg.includes('nashville') || msg.includes('l&d') || msg.includes('learning')) {
-      return '💰 For entry-level L&D specialists in Nashville (2025):<br><br>• <strong>Nashville Market Avg:</strong> $68,425<br>• <strong>National Entry-Level:</strong> $58,974<br>• <strong>BLS Median:</strong> $65,850<br><br>The $57,500 offer is <strong>$10,925 below Nashville average</strong> — that\'s your negotiation leverage!';
+      return '💰 For entry-level L&D specialists in Nashville (2025):<br><br>• <strong>Nashville Market Avg:</strong> ~$68,425 <em>(medium confidence · Salary.com)</em><br>• <strong>BLS National Median:</strong> $63,080 <em>(high confidence · BLS.gov)</em><br>• <strong>National Entry-Level:</strong> ~$58,974 <em>(low confidence · estimated)</em><br><br>The $57,500 offer is <strong>$5,580 below the BLS national median</strong> and an estimated $10,925 below Nashville average — the BLS figure is your strongest citation!';
     }
-    return '💵 Entry-level L&D salaries vary by location:<br><br>• <strong>National average:</strong> $58,974–$65,850<br>• <strong>Nashville:</strong> $68,425<br>• <strong>San Francisco:</strong> $75,000+<br><br>Always check Salary.com, Glassdoor, and local ZipRecruiter data for your city!';
+    return '💵 Entry-level L&D salaries vary by location:<br><br>• <strong>BLS national median:</strong> $63,080 (high confidence · BLS.gov)<br>• <strong>Nashville estimate:</strong> ~$68,425 (medium confidence · Salary.com)<br>• <strong>San Francisco:</strong> $75,000+ (varies widely)<br><br>Always start with BLS.gov (SOC 13-1151) — it\'s a federal source and your strongest negotiation citation!';
   }
   if (msg.includes('negotiate') || msg.includes('counter') || msg.includes('ask for')) {
     if (msg.includes('clawback') || msg.includes('signing bonus')) {
