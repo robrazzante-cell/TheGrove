@@ -98,6 +98,65 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
   border-bottom:1px dotted rgba(212,168,67,.5);
 }
 .cite:hover{color:var(--gold);}
+
+/* ── SUBMIT OFFER DATA ── */
+#submit-btn-wrap{
+  background:var(--green);border-top:1px solid rgba(255,255,255,.08);
+  padding:32px 24px;text-align:center;
+}
+#submit-btn-wrap p{font-size:13px;color:var(--text-muted);margin-bottom:16px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.btn-submit-data{
+  background:transparent;border:2px solid var(--gold);color:var(--gold);
+  border-radius:8px;padding:12px 28px;font-size:13px;font-weight:800;
+  font-family:'Montserrat',sans-serif;cursor:pointer;letter-spacing:.05em;
+  transition:all .2s;
+}
+.btn-submit-data:hover{background:rgba(212,168,67,.12);color:var(--gold-light);}
+#community-note{font-size:11px;color:var(--text-muted);margin-top:10px;}
+
+/* ── SUBMISSION MODAL ── */
+#sub-overlay{display:none;position:fixed;inset:0;z-index:4000;background:rgba(0,10,8,.88);align-items:center;justify-content:center;padding:20px;}
+#sub-overlay.show{display:flex;}
+#sub-modal{
+  background:var(--green-card);border:2px solid var(--gold);border-radius:16px;
+  width:100%;max-width:620px;padding:36px;position:relative;
+  max-height:90vh;overflow-y:auto;
+}
+#sub-x{position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text-muted);font-size:26px;cursor:pointer;font-weight:700;}
+#sub-x:hover{color:var(--danger);}
+.sub-h{font-size:22px;font-weight:900;color:var(--tan);margin-bottom:6px;}
+.sub-warn{
+  background:rgba(245,158,11,.1);border-left:4px solid var(--warn);
+  border-radius:0 8px 8px 0;padding:12px 16px;font-size:13px;
+  color:var(--text-light);line-height:1.7;margin:16px 0;
+}
+.sub-warn strong{color:var(--warn);}
+.sub-tabs{display:flex;gap:0;border-bottom:2px solid rgba(255,255,255,.08);margin-bottom:20px;}
+.sub-tab{
+  padding:10px 20px;font-size:12px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;cursor:pointer;border:none;background:transparent;
+  color:var(--text-muted);font-family:'Montserrat',sans-serif;
+  border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .18s;
+}
+.sub-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.sub-pane{display:none;}
+.sub-pane.active{display:block;}
+.sub-field{margin-bottom:16px;}
+.sub-field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px;}
+.sub-field input,.sub-field select,.sub-field textarea{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;padding:10px 14px;font-size:14px;color:var(--tan);
+  font-family:'Montserrat',sans-serif;outline:none;transition:border-color .18s;
+}
+.sub-field input:focus,.sub-field select:focus,.sub-field textarea:focus{border-color:var(--gold);}
+.sub-field select option{background:var(--green-card);color:var(--tan);}
+.sub-field textarea{resize:vertical;min-height:140px;font-size:13px;line-height:1.6;}
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+#sub-success{display:none;text-align:center;padding:24px 0;}
+#sub-success .s-ico{font-size:52px;margin-bottom:12px;}
+#sub-success .s-h{font-size:20px;font-weight:900;color:var(--success);margin-bottom:8px;}
+#sub-success .s-b{font-size:13px;color:var(--text-light);line-height:1.7;}
+
 /* Citation tooltip */
 #cite-tip{
   display:none;position:fixed;z-index:9000;
@@ -523,6 +582,104 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
 <!-- CITATION TOOLTIP -->
 <div id="cite-tip"></div>
 
+<!-- SUBMIT OFFER DATA SECTION -->
+<div id="submit-btn-wrap">
+  <p>Help us build a more accurate dataset. Submit your real job offer (anonymized) and your data will be included in the community benchmarks shown in this simulation.</p>
+  <button class="btn-submit-data" onclick="openSubModal()">📤 Submit Your Job Offer Data</button>
+  <div id="community-note"></div>
+</div>
+
+<!-- SUBMISSION MODAL -->
+<div id="sub-overlay" onclick="closeSubModal(event)">
+  <div id="sub-modal">
+    <button id="sub-x" onclick="closeSubModal()">✕</button>
+
+    <div id="sub-form-wrap">
+      <div class="sub-h">📤 Share Your Offer Data</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">Your submission is anonymous and helps improve this tool for everyone.</p>
+
+      <div class="sub-warn">
+        <strong>⚠️ Before submitting, remove all identifying information:</strong><br>
+        Your full name · Employer name · Hiring manager name · Your address · Any document reference numbers · Social Security or EIN numbers
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="switchTab('structured')">Quick Entry</button>
+        <button class="sub-tab" onclick="switchTab('paste')">Paste Offer Text</button>
+      </div>
+
+      <!-- STRUCTURED FIELDS -->
+      <div class="sub-pane active" id="pane-structured">
+        <div class="sub-grid">
+          <div class="sub-field">
+            <label>Base Salary Offered ($)</label>
+            <input type="number" id="sub-salary" placeholder="e.g. 57500" min="20000" max="500000">
+          </div>
+          <div class="sub-field">
+            <label>City / Metro Area</label>
+            <input type="text" id="sub-city" placeholder="e.g. Nashville, TN">
+          </div>
+        </div>
+        <div class="sub-grid">
+          <div class="sub-field">
+            <label>Job Title</label>
+            <input type="text" id="sub-title" placeholder="e.g. L&D Specialist">
+          </div>
+          <div class="sub-field">
+            <label>Industry</label>
+            <select id="sub-industry">
+              <option value="">Select…</option>
+              <option>Corporate L&D / Training</option>
+              <option>Education / Higher Ed</option>
+              <option>Healthcare</option>
+              <option>Technology</option>
+              <option>Government / Nonprofit</option>
+              <option>Financial Services</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="sub-grid">
+          <div class="sub-field">
+            <label>Experience Level</label>
+            <select id="sub-level">
+              <option value="">Select…</option>
+              <option value="entry">Entry-level (0–2 yrs)</option>
+              <option value="mid">Mid-level (3–5 yrs)</option>
+              <option value="senior">Senior (5+ yrs)</option>
+            </select>
+          </div>
+          <div class="sub-field">
+            <label>Offer Date (approx.)</label>
+            <input type="month" id="sub-date">
+          </div>
+        </div>
+        <div class="sub-field">
+          <label>Did you negotiate? What was the outcome?</label>
+          <input type="text" id="sub-outcome" placeholder="e.g. Accepted as-is / Negotiated up to $62,000 / Declined">
+        </div>
+      </div>
+
+      <!-- PASTE TAB -->
+      <div class="sub-pane" id="pane-paste">
+        <div class="sub-field">
+          <label>Paste anonymized offer text below</label>
+          <textarea id="sub-paste" placeholder="Paste your offer letter here. Remove: your name, employer name, manager name, address, and any document/reference numbers before pasting."></textarea>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);">Text is stored as-is and reviewed by the Redwood Communication team. It will never be published.</p>
+      </div>
+
+      <button class="btn-p" style="width:100%;margin-top:8px;" onclick="submitOffer()">Submit Anonymously →</button>
+    </div>
+
+    <div id="sub-success">
+      <div class="s-ico">✅</div>
+      <div class="s-h">Thank you for contributing!</div>
+      <div class="s-b">Your anonymized offer data has been added to the dataset. As more people contribute, the community benchmarks in this simulation will reflect real-world data more accurately.</div>
+    </div>
+  </div>
+</div>
+
 <!-- TOOLTIP OVERLAY -->
 <div id="tip-box">
   <button id="tp-x" onclick="closeTip()">✕</button>
@@ -575,6 +732,11 @@ body{font-family:'Montserrat',sans-serif;background:var(--green-deep);color:#fff
         <div class="bc-lbl" id="bar4lab">🟦 Related Major Avg</div>
         <div class="bc-bar"><div class="bc-fill" id="bar4" style="width:0%"></div></div>
         <div class="bc-val-wrap"><div class="bc-val" id="bar4val">$58,974</div><div class="bc-conf lo">● Low · Estimated, verify on NACE</div></div>
+      </div>
+      <div class="bc-row" id="community-bar-row" style="display:none;">
+        <div class="bc-lbl">👥 Community Submissions</div>
+        <div class="bc-bar"><div class="bc-fill" id="bar-community" style="width:0%;background:linear-gradient(90deg,#6366f1,#818cf8);"></div></div>
+        <div class="bc-val-wrap"><div class="bc-val" id="community-val">—</div><div class="bc-conf" style="color:#818cf8;" id="community-conf">● Loading…</div></div>
       </div>
       <div class="bc-row">
         <div class="bc-lbl">📄 This Offer (Base)</div>
@@ -1234,6 +1396,100 @@ function getResponse(msg) {
   </div>
 </div>
 
+<!-- Firebase for community submissions -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyDummy", // read/write uses open RTDB rules — no API key needed for REST
+  databaseURL: "https://redwood-ism-default-rtdb.firebaseio.com",
+  projectId: "redwood-ism",
+});
+const offerDB = firebase.database();
+
+// ── COMMUNITY DATA ────────────────────────────────────────────
+function loadCommunityData() {
+  fetch('https://redwood-ism-default-rtdb.firebaseio.com/offer_iq_submissions.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (!data) return;
+      var entries = Object.values(data).filter(function(e){ return e && e.salary > 20000; });
+      if (!entries.length) return;
+      var salaries = entries.map(function(e){ return e.salary; }).sort(function(a,b){ return a-b; });
+      var median = salaries[Math.floor(salaries.length / 2)];
+      var maxRef = 68425;
+      var pct = Math.min(Math.round(median / maxRef * 100), 100);
+      document.getElementById('community-val').textContent = '$' + median.toLocaleString();
+      document.getElementById('community-conf').textContent = '● Community · ' + entries.length + ' submission' + (entries.length !== 1 ? 's' : '');
+      document.getElementById('bar-community').style.width = pct + '%';
+      document.getElementById('community-bar-row').style.display = '';
+      document.getElementById('community-note').textContent = entries.length + ' anonymized offer' + (entries.length !== 1 ? 's' : '') + ' in the dataset';
+    })
+    .catch(function(){});
+}
+loadCommunityData();
+
+// ── SUBMISSION MODAL ──────────────────────────────────────────
+function openSubModal() {
+  document.getElementById('sub-form-wrap').style.display = 'block';
+  document.getElementById('sub-success').style.display = 'none';
+  document.getElementById('sub-overlay').classList.add('show');
+  // Pre-fill date with current month
+  var d = new Date(), m = String(d.getMonth()+1).padStart(2,'0');
+  document.getElementById('sub-date').value = d.getFullYear() + '-' + m;
+}
+function closeSubModal(e) {
+  if (e && e.target.id !== 'sub-overlay') return;
+  if (!e) document.getElementById('sub-overlay').classList.remove('show');
+  else document.getElementById('sub-overlay').classList.remove('show');
+}
+function switchTab(tab) {
+  document.querySelectorAll('.sub-tab').forEach(function(t,i){ t.classList.toggle('active', (i===0&&tab==='structured')||(i===1&&tab==='paste')); });
+  document.getElementById('pane-structured').classList.toggle('active', tab==='structured');
+  document.getElementById('pane-paste').classList.toggle('active', tab==='paste');
+}
+function submitOffer() {
+  var salary  = parseInt(document.getElementById('sub-salary').value) || 0;
+  var city    = (document.getElementById('sub-city').value || '').trim();
+  var title   = (document.getElementById('sub-title').value || '').trim();
+  var ind     = document.getElementById('sub-industry').value;
+  var level   = document.getElementById('sub-level').value;
+  var date    = document.getElementById('sub-date').value;
+  var outcome = (document.getElementById('sub-outcome').value || '').trim();
+  var paste   = (document.getElementById('sub-paste').value || '').trim();
+
+  if (!salary && !paste) {
+    alert('Please enter at least a base salary or paste your offer text.');
+    return;
+  }
+
+  var payload = {
+    salary:  salary || null,
+    city:    city   || null,
+    title:   title  || null,
+    industry: ind   || null,
+    level:   level  || null,
+    date:    date   || null,
+    outcome: outcome || null,
+    pasteText: paste || null,
+    submittedAt: new Date().toISOString(),
+  };
+
+  fetch('https://redwood-ism-default-rtdb.firebaseio.com/offer_iq_submissions.json', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  .then(function(r) {
+    document.getElementById('sub-form-wrap').style.display = 'none';
+    document.getElementById('sub-success').style.display = 'block';
+    loadCommunityData(); // refresh the chart
+  })
+  .catch(function() {
+    alert('Submission failed — please try again or email your data to rob@redwoodcommunication.com');
+  });
+}
+</script>
 <script>
 // ── DYNAMIC OFFER DATES ───────────────────────────────────────
 (function() {
